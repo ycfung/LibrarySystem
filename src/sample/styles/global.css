@@ -1,0 +1,12 @@
+FontAwesomeIcon:hover {
+    -fx-cursor: hand;
+}
+
+.borderpane {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0);
+}
+
+.root{
+-fx-font-size: 16px;
+-fx-font-family: "Microsoft YaHei UI";
+}
