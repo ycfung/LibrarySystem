@@ -33,7 +33,6 @@
                                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                  </HBox.margin>
                               </JFXTextField>
-                              <JFXCheckBox checkedColor="#34495e" text="仅限可借图书" />
                               <JFXButton buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="搜索" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
@@ -98,11 +97,6 @@
                                        </VBox.margin>
                                        <children>
                                           <Label text="图书信息" />
-                                          <JFXButton buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="修改" textFill="WHITE">
-                                             <HBox.margin>
-                                                <Insets left="30.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
@@ -167,21 +161,7 @@
                                           </JFXTextField>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <JFXButton buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #27ae60;" text="保存" textFill="WHITE" />
-                                          <JFXButton buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #e74c3c;" text="删除" textFill="WHITE">
-                                             <HBox.margin>
-                                                <Insets left="30.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
-                                          <JFXButton buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #f1c40f;" text="还原" textFill="WHITE">
-                                             <HBox.margin>
-                                                <Insets left="30.0" />
-                                             </HBox.margin>
-                                          </JFXButton>
-                                       </children>
-                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" />
                                  </children>
                               </VBox>
                            </children>
@@ -231,7 +211,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="88.0" prefWidth="1280.0">
                            <children>
-                              <JFXTextField labelFloat="true" promptText="扫描或输入识别码" unFocusColor="#4059a9">
+                              <JFXTextField labelFloat="true" promptText="扫描或输入条形码" unFocusColor="#4059a9">
                                  <HBox.margin>
                                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                  </HBox.margin>
@@ -244,11 +224,30 @@
                               </JFXButton>
                            </children>
                         </HBox>
-                        <JFXTreeTableView prefHeight="547.0" prefWidth="1220.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
+                        <HBox>
                            <VBox.margin>
                               <Insets bottom="10.0" left="30.0" right="30.0" />
                            </VBox.margin>
-                        </JFXTreeTableView>
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <JFXTextField labelFloat="true" promptText="条形码" />
+                                    <JFXTextField labelFloat="true" promptText="标题" />
+                                    <JFXTextField labelFloat="true" promptText="出版社" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <JFXTextField labelFloat="true" promptText="作者" />
+                                    <JFXTextField labelFloat="true" promptText="分类" />
+                                    <JFXCheckBox />
+                                 </children>
+                              </VBox>
+                              <JFXTreeTableView prefHeight="547.0" prefWidth="426.0" style="-fx-background-color: transparent; -fx-border-color: grey;" />
+                              <JFXButton buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="增加" textFill="WHITE" />
+                              <JFXButton buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="删除" textFill="WHITE" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </content>

@@ -15,7 +15,7 @@ public class Main extends Application {
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
         Parent root = FXMLLoader.load(getClass().getResource("UserUI.fxml"));
         Scene scene = new Scene(root);
-        Controller controller = fxmlLoader.getController();
+        UserController userController = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("styles/global.css").toExternalForm());
         stage.setResizable(false);
         stage.setTitle("Title");
