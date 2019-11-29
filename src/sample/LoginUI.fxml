@@ -10,7 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="568.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="568.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
    <children>
       <Label prefHeight="81.0" prefWidth="104.0" style="-fx-font-size: 30;" text="登录">
          <VBox.margin>
@@ -26,17 +26,17 @@
             </ImageView>
          </children>
       </VBox>
-      <JFXTextField labelFloat="true" promptText="ID">
+      <JFXTextField fx:id="textField" labelFloat="true" promptText="ID">
          <VBox.margin>
             <Insets bottom="30.0" left="65.0" right="65.0" top="30.0" />
          </VBox.margin>
       </JFXTextField>
-      <JFXPasswordField labelFloat="true" promptText="密码">
+      <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="密码">
          <VBox.margin>
             <Insets bottom="30.0" left="65.0" right="65.0" top="30.0" />
          </VBox.margin>
       </JFXPasswordField>
-      <JFXButton buttonType="RAISED" prefHeight="48.0" prefWidth="438.0" style="-fx-background-color: #34495e;" text="登录" textFill="WHITE">
+      <JFXButton fx:id="LoginBtn" buttonType="RAISED" prefHeight="48.0" prefWidth="438.0" style="-fx-background-color: #34495e;" text="登录" textFill="WHITE">
          <VBox.margin>
             <Insets bottom="30.0" left="65.0" right="65.0" top="30.0" />
          </VBox.margin>

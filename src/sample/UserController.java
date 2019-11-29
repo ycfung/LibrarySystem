@@ -129,9 +129,9 @@ public class UserController {
         assert infoBalance != null : "fx:id=\"infoBalance\" was not injected: check your FXML file 'UserUI.fxml'.";
         assert infoBorrowCount != null : "fx:id=\"infoBorrowCount\" was not injected: check your FXML file 'UserUI.fxml'.";
 
-        System.out.println("Initialized");
-        searchComboBox.setItems(FXCollections.observableArrayList("按标题","按xx","按yy"));
 
+        searchComboBox.setItems(FXCollections.observableArrayList("按标题","按xx","按yy"));
+        System.out.println("User UI Initialized");
 
     }
 }

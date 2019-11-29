@@ -11,11 +11,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginUI.fxml"));
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        Parent root = FXMLLoader.load(getClass().getResource("UserUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
         Scene scene = new Scene(root);
-        UserController userController = fxmlLoader.getController();
+        LoginController controller = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("styles/global.css").toExternalForm());
         stage.setResizable(false);
         stage.setTitle("Title");
