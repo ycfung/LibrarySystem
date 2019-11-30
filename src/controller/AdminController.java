@@ -1,4 +1,4 @@
-package sample;
+package controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
@@ -210,8 +210,8 @@ public class AdminController {
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoApply != null : "fx:id=\"userInfoApply\" was not injected: check your FXML file 'AdminUI.fxml'.";
 
-
-        searchComboBox.setItems(FXCollections.observableArrayList("按标题","按xx","按yy"));
+        //搜索图书页面
+        searchComboBox.setItems(FXCollections.observableArrayList("按标题","按作者","按"));
         System.out.println("Admin UI Initialized");
     }
 }
