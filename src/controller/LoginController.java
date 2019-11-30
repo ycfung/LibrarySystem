@@ -35,7 +35,7 @@ public class LoginController {
         assert textField != null : "fx:id=\"textField\" was not injected: check your FXML file 'LoginUI.fxml'.";
         assert passwordField != null : "fx:id=\"passwordField\" was not injected: check your FXML file 'LoginUI.fxml'.";
         assert LoginBtn != null : "fx:id=\"LoginBtn\" was not injected: check your FXML file 'LoginUI.fxml'.";
-        assert stackapne != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'LoginUI.fxml'.";
+        assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'LoginUI.fxml'.";
         System.out.println("Login UI Initialized");
 
     }
