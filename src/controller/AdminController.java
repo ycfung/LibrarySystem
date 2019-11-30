@@ -1,15 +1,23 @@
 package controller;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableView;
+
+import com.jfoenix.controls.*;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TreeItem;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import model.Book;
+
 
 public class AdminController {
 
@@ -32,7 +40,7 @@ public class AdminController {
     private JFXButton searchSearchBtn;
 
     @FXML
-    private JFXTreeTableView<?> searchTableView;
+    private JFXTreeTableView<Book> searchTableView;
 
     @FXML
     private JFXButton searchBookInfo;
@@ -210,8 +218,81 @@ public class AdminController {
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoApply != null : "fx:id=\"userInfoApply\" was not injected: check your FXML file 'AdminUI.fxml'.";
 
-        //搜索图书页面
-        searchComboBox.setItems(FXCollections.observableArrayList("按标题","按作者","按"));
-        System.out.println("Admin UI Initialized");
+        /**
+         * 搜索图书页面
+         */
+        searchComboBox.setItems(FXCollections.observableArrayList("按书名", "按作者", "按出版社", "按类型"));
+        searchSearchBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            String att;
+            if ("按书名".equals(searchComboBox.getValue())) {
+                att = "name";
+            } else if ("按作者".equals(searchComboBox.getValue())) {
+                att = "author";
+            } else if ("按出版社".equals(searchComboBox.getValue())) {
+                att = "press";
+            } else {
+                att = "category";
+            }
+            ObservableList<Book> books = LibraryAdministrator.queryByAtt(att, searchTextField.getText());
+
+            JFXTreeTableColumn<Book, String> idCol = new JFXTreeTableColumn<>("识别码");
+            JFXTreeTableColumn<Book, String> barcodeCol = new JFXTreeTableColumn<>("条形码");
+            JFXTreeTableColumn<Book, String> nameCol = new JFXTreeTableColumn<>("书名");
+            JFXTreeTableColumn<Book, String> authorCol = new JFXTreeTableColumn<>("作者");
+            JFXTreeTableColumn<Book, String> pressCol = new JFXTreeTableColumn<>("出版社");
+            JFXTreeTableColumn<Book, String> categoryCol = new JFXTreeTableColumn<>("类型");
+            JFXTreeTableColumn<Book, String> priceCol = new JFXTreeTableColumn<>("价格");
+            JFXTreeTableColumn<Book, String> stateCol = new JFXTreeTableColumn<>("状态");
+            JFXTreeTableColumn<Book, String> addressCol = new JFXTreeTableColumn<>("地点");
+
+            idCol.setPrefWidth(90);
+            barcodeCol.setPrefWidth(90);
+            nameCol.setPrefWidth(200);
+            authorCol.setPrefWidth(100);
+            pressCol.setPrefWidth(200);
+            categoryCol.setPrefWidth(100);
+            priceCol.setPrefWidth(70);
+            stateCol.setPrefWidth(85);
+            addressCol.setPrefWidth(100);
+
+            idCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+            barcodeCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBarcode()));
+            nameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
+            authorCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAuthor()));
+            pressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPress()));
+            categoryCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getCategoty()));
+            priceCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice()));
+            stateCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getState()));
+            addressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAddress()));
+
+            TreeItem<Book> root = new RecursiveTreeItem<Book>(books, RecursiveTreeObject::getChildren);
+            searchTableView.getColumns().setAll(idCol, barcodeCol, nameCol, authorCol, pressCol, categoryCol, priceCol, stateCol, addressCol);
+            searchTableView.setRoot(root);
+            searchTableView.setShowRoot(false);
+        });
+
+        searchBookInfo.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
+
+        searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue.getValue().getId());
+        });
+
     }
+
+    /*private void showMsgDialog(String heading, String msg) {
+        JFXDialogLayout content = new JFXDialogLayout();
+        Text t = new Text(heading);
+        t.setFont(Font.font("Microsoft YaHei", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        Text m = new Text(msg);
+        m.setFont(Font.font("Microsoft YaHei", FontWeight.NORMAL, FontPosture.REGULAR, 16));
+        content.setHeading(t);
+        content.setBody(m);
+        JFXButton btn = new JFXButton("OK");
+        JFXDialog dialog = new JFXDialog(stackpane, content, JFXDialog.DialogTransition.CENTER);
+        btn.setOnAction(event -> dialog.close());
+        content.setActions(btn);
+        dialog.show();
+    }*/
 }
