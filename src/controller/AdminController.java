@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -26,6 +27,9 @@ public class AdminController {
 
     @FXML
     private URL location;
+
+    @FXML
+    private StackPane stackpane;
 
     @FXML
     private Tab searchTab;
@@ -88,7 +92,16 @@ public class AdminController {
     private JFXTextField bookInfoReturnDate;
 
     @FXML
+    private JFXTextField bookInfoBorrowerID;
+
+    @FXML
+    private JFXTextField bookInfoBorrowerName;
+
+    @FXML
     private Tab recordTab;
+
+    @FXML
+    private JFXComboBox<?> recordComboBox;
 
     @FXML
     private JFXTextField recordTextField;
@@ -170,6 +183,7 @@ public class AdminController {
 
     @FXML
     void initialize() {
+        assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchTab != null : "fx:id=\"searchTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchComboBox != null : "fx:id=\"searchComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchTextField != null : "fx:id=\"searchTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -190,7 +204,10 @@ public class AdminController {
         assert bookInfostatus != null : "fx:id=\"bookInfostatus\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowDate != null : "fx:id=\"bookInfoBorrowDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoReturnDate != null : "fx:id=\"bookInfoReturnDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoBorrowerID != null : "fx:id=\"bookInfoBorrowerID\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoBorrowerName != null : "fx:id=\"bookInfoBorrowerName\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordTab != null : "fx:id=\"recordTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert recordComboBox != null : "fx:id=\"recordComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordTextField != null : "fx:id=\"recordTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordSearch != null : "fx:id=\"recordSearch\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordReset != null : "fx:id=\"recordReset\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -217,6 +234,8 @@ public class AdminController {
         assert userInfoAdd != null : "fx:id=\"userInfoAdd\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoApply != null : "fx:id=\"userInfoApply\" was not injected: check your FXML file 'AdminUI.fxml'.";
+
+
 
         /**
          * 搜索图书页面

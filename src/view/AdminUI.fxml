@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@styles/global.css">
@@ -164,7 +163,20 @@
                                                               </JFXTextField>
                                                           </children>
                                                       </HBox>
-                                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" />
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <JFXTextField fx:id="bookInfoBorrowerID" labelFloat="true" promptText="借阅者ID">
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </JFXTextField>
+                                                <JFXTextField fx:id="bookInfoBorrowerName" labelFloat="true" promptText="借阅者用户名">
+                                                   <HBox.margin>
+                                                      <Insets left="50.0" />
+                                                   </HBox.margin>
+                                                </JFXTextField>
+                                             </children>
+                                          </HBox>
                                                   </children>
                                               </VBox>
                                           </children>
@@ -179,7 +191,12 @@
                                   <children>
                                       <HBox alignment="CENTER_LEFT" prefHeight="126.0" prefWidth="1280.0">
                                           <children>
-                                              <JFXTextField fx:id="recordTextField" promptText="扫描或输入识别码" unFocusColor="#4059a9">
+                                    <JFXComboBox fx:id="recordComboBox" prefHeight="31.0" prefWidth="195.0" promptText="选择条形码或识别码">
+                                       <HBox.margin>
+                                          <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                       </HBox.margin>
+                                    </JFXComboBox>
+                                              <JFXTextField fx:id="recordTextField" promptText="请输入" unFocusColor="#4059a9">
                                                   <HBox.margin>
                                                       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                                   </HBox.margin>

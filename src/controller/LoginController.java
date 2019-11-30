@@ -8,8 +8,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.scene.layout.StackPane;
 
 public class LoginController {
+
+    @FXML
+    private StackPane stackpane;
 
     @FXML
     private ResourceBundle resources;
@@ -31,7 +35,7 @@ public class LoginController {
         assert textField != null : "fx:id=\"textField\" was not injected: check your FXML file 'LoginUI.fxml'.";
         assert passwordField != null : "fx:id=\"passwordField\" was not injected: check your FXML file 'LoginUI.fxml'.";
         assert LoginBtn != null : "fx:id=\"LoginBtn\" was not injected: check your FXML file 'LoginUI.fxml'.";
-
+        assert stackapne != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'LoginUI.fxml'.";
         System.out.println("Login UI Initialized");
 
     }

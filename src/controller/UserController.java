@@ -13,8 +13,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.StackPane;
 
 public class UserController {
+
+    @FXML
+    private StackPane stackpane;
 
     @FXML
     private ResourceBundle resources;
@@ -128,6 +132,7 @@ public class UserController {
         assert infoID != null : "fx:id=\"infoID\" was not injected: check your FXML file 'UserUI.fxml'.";
         assert infoBalance != null : "fx:id=\"infoBalance\" was not injected: check your FXML file 'UserUI.fxml'.";
         assert infoBorrowCount != null : "fx:id=\"infoBorrowCount\" was not injected: check your FXML file 'UserUI.fxml'.";
+        assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'UserUI.fxml'.";
 
 
         searchComboBox.setItems(FXCollections.observableArrayList("按标题","按xx","按yy"));
