@@ -76,13 +76,13 @@ public class AdminController {
     private JFXTextField bookInfoTitle;
 
     @FXML
-    private JFXTextField BookInfoPublisher;
+    private JFXTextField bookInfoPublisher;
 
     @FXML
     private JFXTextField bookInfoAuthor;
 
     @FXML
-    private JFXTextField BookInfoCategory;
+    private JFXTextField bookInfoCategory;
 
     @FXML
     private JFXTextField bookInfoIsBorrowable;
@@ -207,9 +207,9 @@ public class AdminController {
         assert bookInfoID != null : "fx:id=\"bookInfoID\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBarcode != null : "fx:id=\"bookInfoBarcode\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoTitle != null : "fx:id=\"bookInfoTitle\" was not injected: check your FXML file 'AdminUI.fxml'.";
-        assert BookInfoPublisher != null : "fx:id=\"BookInfoPublisher\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoPublisher != null : "fx:id=\"BookInfoPublisher\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoAuthor != null : "fx:id=\"bookInfoAuthor\" was not injected: check your FXML file 'AdminUI.fxml'.";
-        assert BookInfoCategory != null : "fx:id=\"BookInfoCategory\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoCategory != null : "fx:id=\"BookInfoCategory\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoIsBorrowable != null : "fx:id=\"bookInfoIsBorrowable\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowDate != null : "fx:id=\"bookInfoBorrowDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoReturnDate != null : "fx:id=\"bookInfoReturnDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -303,7 +303,21 @@ public class AdminController {
         });
 
         searchBookInfo.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            System.out.println(1);
+            tabpane.getSelectionModel().select(bookInfoTab);
+            bookInfoTextField.setText(bookInfo[0]);
+            bookInfoID.setText(bookInfo[0]);
+            bookInfoBarcode.setText(bookInfo[1]);
+            bookInfoTitle.setText(bookInfo[2]);
+            bookInfoPublisher.setText(bookInfo[4]);
+            bookInfoAuthor.setText(bookInfo[3]);
+            bookInfoCategory.setText(bookInfo[5]);
+            bookInfoIsBorrowable.setText(bookInfo[7]);
+            bookInfoLocation.setText(bookInfo[8]);
+            bookInfoBorrowDate.setText(bookInfo[9]);
+            bookInfoReturnDate.setText(bookInfo[10]);
+            bookInfoBorrowerID.setText(bookInfo[11]);
+            bookInfoBorrowerName.setText(bookInfo[12]);
+            bookInfoPrice.setText(bookInfo[6]);
         });
 
         searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -311,6 +325,9 @@ public class AdminController {
             String[] s = LibraryAdministrator.getNewRecodeByID(bookInfo[0]);
             for (int i = 0; i < 12; i++) {
                 bookInfo[i + 1] = s[i];
+                if (s[i] == null) {
+                    bookInfo[i + 1] = "无";
+                }
             }
         });
     }
