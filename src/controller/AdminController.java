@@ -17,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import model.Book;
 
 
@@ -184,6 +185,8 @@ public class AdminController {
     @FXML
     private JFXButton userInfoApply;
 
+    private String[] bookInfo;
+
     @FXML
     void initialize() {
         assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -237,8 +240,6 @@ public class AdminController {
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoApply != null : "fx:id=\"userInfoApply\" was not injected: check your FXML file 'AdminUI.fxml'.";
 
-
-
         /**
          * 搜索图书页面
          */
@@ -254,7 +255,12 @@ public class AdminController {
             } else {
                 att = "category";
             }
+
             ObservableList<Book> books = LibraryAdministrator.queryByAtt(att, searchTextField.getText());
+            if (books.isEmpty()) {
+                showMsgDialog("", "抱歉，未找到相关书籍");
+                return;
+            }
 
             JFXTreeTableColumn<Book, String> idCol = new JFXTreeTableColumn<>("识别码");
             JFXTreeTableColumn<Book, String> barcodeCol = new JFXTreeTableColumn<>("条形码");
@@ -297,12 +303,28 @@ public class AdminController {
         });
 
         searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(newValue.getValue().getId());
-        });
+            bookInfo[0] = newValue.getValue().getId();
+            bookInfo[1] = newValue.getValue().getBarcode();
+            bookInfo[2] = newValue.getValue().getName();
+            bookInfo[3] = newValue.getValue().getAuthor();
+            bookInfo[4] = newValue.getValue().getPress();
+            bookInfo[5] = newValue.getValue().getCategoty();
+            bookInfo[6] = newValue.getValue().getPrice();
+            bookInfo[7] = newValue.getValue().getState();
+            bookInfo[8] = newValue.getValue().getAddress();
 
+            String[] s = LibraryAdministrator.getNewRecodeByID(bookInfo[0]);
+
+            bookInfo[0] = newValue.getValue().getId();
+            bookInfo[0] = newValue.getValue().getId();
+            bookInfo[0] = newValue.getValue().getId();
+            bookInfo[0] = newValue.getValue().getId();
+
+
+        });
     }
 
-    /*private void showMsgDialog(String heading, String msg) {
+    private void showMsgDialog(String heading, String msg) {
         JFXDialogLayout content = new JFXDialogLayout();
         Text t = new Text(heading);
         t.setFont(Font.font("Microsoft YaHei", FontWeight.BOLD, FontPosture.REGULAR, 20));
@@ -315,5 +337,5 @@ public class AdminController {
         btn.setOnAction(event -> dialog.close());
         content.setActions(btn);
         dialog.show();
-    }*/
+    }
 }
