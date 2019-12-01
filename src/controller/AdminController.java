@@ -185,7 +185,7 @@ public class AdminController {
     @FXML
     private JFXButton userInfoApply;
 
-    private String[] bookInfo;
+    private String[] bookInfo = new String[13];
 
     @FXML
     void initialize() {
@@ -299,24 +299,15 @@ public class AdminController {
         });
 
         searchBookInfo.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-
+            System.out.println(1);
         });
 
         searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             bookInfo[0] = newValue.getValue().getId();
-            bookInfo[1] = newValue.getValue().getBarcode();
-            bookInfo[2] = newValue.getValue().getName();
-            bookInfo[3] = newValue.getValue().getAuthor();
-            bookInfo[4] = newValue.getValue().getPress();
-            bookInfo[5] = newValue.getValue().getCategoty();
-            bookInfo[6] = newValue.getValue().getPrice();
-            bookInfo[7] = newValue.getValue().getState();
-            bookInfo[8] = newValue.getValue().getAddress();
             String[] s = LibraryAdministrator.getNewRecodeByID(bookInfo[0]);
-            bookInfo[9] = s[0];
-            bookInfo[10] = s[1];
-            bookInfo[11] = s[2];
-            bookInfo[12] = s[3];
+            for (int i = 0; i < 12; i++) {
+                bookInfo[i + 1] = s[i];
+            }
         });
     }
 
