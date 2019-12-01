@@ -146,7 +146,7 @@
                                                                       <Insets />
                                                                   </HBox.margin>
                                                               </JFXTextField>
-                                                              <JFXTextField fx:id="bookInfostatus" labelFloat="true" promptText="借阅状态">
+                                                              <JFXTextField fx:id="bookInfoLocation" labelFloat="true" promptText="位置">
                                                                   <HBox.margin>
                                                                       <Insets left="50.0" />
                                                                   </HBox.margin>
@@ -171,6 +171,11 @@
                                                    </HBox.margin>
                                                 </JFXTextField>
                                                 <JFXTextField fx:id="bookInfoBorrowerName" labelFloat="true" promptText="借阅者用户名">
+                                                   <HBox.margin>
+                                                      <Insets left="50.0" />
+                                                   </HBox.margin>
+                                                </JFXTextField>
+                                                <JFXTextField fx:id="bookInfoPrice" labelFloat="true" promptText="价格">
                                                    <HBox.margin>
                                                       <Insets left="50.0" />
                                                    </HBox.margin>

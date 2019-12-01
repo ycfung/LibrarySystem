@@ -84,7 +84,10 @@ public class AdminController {
     private JFXTextField bookInfoIsBorrowable;
 
     @FXML
-    private JFXTextField bookInfostatus;
+    private JFXTextField bookInfoPrice;
+
+    @FXML
+    private JFXTextField bookInfoLocation;
 
     @FXML
     private JFXTextField bookInfoBorrowDate;
@@ -204,7 +207,6 @@ public class AdminController {
         assert bookInfoAuthor != null : "fx:id=\"bookInfoAuthor\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert BookInfoCategory != null : "fx:id=\"BookInfoCategory\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoIsBorrowable != null : "fx:id=\"bookInfoIsBorrowable\" was not injected: check your FXML file 'AdminUI.fxml'.";
-        assert bookInfostatus != null : "fx:id=\"bookInfostatus\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowDate != null : "fx:id=\"bookInfoBorrowDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoReturnDate != null : "fx:id=\"bookInfoReturnDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowerID != null : "fx:id=\"bookInfoBorrowerID\" was not injected: check your FXML file 'AdminUI.fxml'.";
