@@ -18,6 +18,15 @@ public class LibraryAdministrator {
         return books;
     }
 
+    public static String[] getNewRecodeByID(String id) {
+        String[] s = new String[5];
+        s[0] = "2019年10月1日";
+        s[1] = "未还";
+        s[2] = "55171029";
+        s[3] = "ycfung";
+        return s;
+    }
+
     public String[] getBookInfoByBarcode(String barcode) {
         return null;
     }
