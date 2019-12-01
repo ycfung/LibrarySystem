@@ -310,15 +310,11 @@ public class AdminController {
             bookInfo[6] = newValue.getValue().getPrice();
             bookInfo[7] = newValue.getValue().getState();
             bookInfo[8] = newValue.getValue().getAddress();
-
             String[] s = LibraryAdministrator.getNewRecodeByID(bookInfo[0]);
-
-            bookInfo[0] = newValue.getValue().getId();
-            bookInfo[0] = newValue.getValue().getId();
-            bookInfo[0] = newValue.getValue().getId();
-            bookInfo[0] = newValue.getValue().getId();
-
-
+            bookInfo[9] = s[0];
+            bookInfo[10] = s[1];
+            bookInfo[11] = s[2];
+            bookInfo[12] = s[3];
         });
     }
 
