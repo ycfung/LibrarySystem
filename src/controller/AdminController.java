@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -28,6 +29,9 @@ public class AdminController {
 
     @FXML
     private URL location;
+
+    @FXML
+    private TabPane tabpane;
 
     @FXML
     private StackPane stackpane;
