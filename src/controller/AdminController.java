@@ -93,9 +93,6 @@ public class AdminController {
     private JFXTextField bookInfoIsBorrowable;
 
     @FXML
-    private JFXTextField bookInfoPrice;
-
-    @FXML
     private JFXTextField bookInfoLocation;
 
     @FXML
@@ -109,6 +106,9 @@ public class AdminController {
 
     @FXML
     private JFXTextField bookInfoBorrowerName;
+
+    @FXML
+    private JFXTextField bookInfoPrice;
 
     @FXML
     private Tab recordTab;
@@ -150,10 +150,16 @@ public class AdminController {
     private JFXTextField addPublisher;
 
     @FXML
+    private JFXTextField addLocatioin;
+
+    @FXML
     private JFXTextField addAuthor;
 
     @FXML
     private JFXTextField addcategory;
+
+    @FXML
+    private JFXTextField addPrice;
 
     @FXML
     private JFXCheckBox addIsBorrowable;
@@ -168,6 +174,9 @@ public class AdminController {
     private JFXButton addDeleteBtn;
 
     @FXML
+    private JFXButton addDeleteBtn1;
+
+    @FXML
     private Tab userInfoTab;
 
     @FXML
@@ -178,9 +187,6 @@ public class AdminController {
 
     @FXML
     private JFXButton userInfoSearch;
-
-    @FXML
-    private JFXButton userInfoReset;
 
     @FXML
     private JFXTreeTableView<?> userInfoTableView;
@@ -199,6 +205,7 @@ public class AdminController {
     @FXML
     void initialize() {
         assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert tabpane != null : "fx:id=\"tabpane\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchTab != null : "fx:id=\"searchTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchComboBox != null : "fx:id=\"searchComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchTextField != null : "fx:id=\"searchTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -216,10 +223,12 @@ public class AdminController {
         assert bookInfoAuthor != null : "fx:id=\"bookInfoAuthor\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoCategory != null : "fx:id=\"BookInfoCategory\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoIsBorrowable != null : "fx:id=\"bookInfoIsBorrowable\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoLocation != null : "fx:id=\"bookInfoLocation\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowDate != null : "fx:id=\"bookInfoBorrowDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoReturnDate != null : "fx:id=\"bookInfoReturnDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowerID != null : "fx:id=\"bookInfoBorrowerID\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowerName != null : "fx:id=\"bookInfoBorrowerName\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoPrice != null : "fx:id=\"bookInfoPrice\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordTab != null : "fx:id=\"recordTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordComboBox != null : "fx:id=\"recordComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordTextField != null : "fx:id=\"recordTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -233,17 +242,19 @@ public class AdminController {
         assert addBarcode != null : "fx:id=\"addBarcode\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addTitle != null : "fx:id=\"addTitle\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addPublisher != null : "fx:id=\"addPublisher\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addLocatioin != null : "fx:id=\"addLocatioin\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addAuthor != null : "fx:id=\"addAuthor\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addcategory != null : "fx:id=\"addcategory\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addPrice != null : "fx:id=\"addPrice\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addIsBorrowable != null : "fx:id=\"addIsBorrowable\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addTableView != null : "fx:id=\"addTableView\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addAddBtn != null : "fx:id=\"addAddBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addDeleteBtn != null : "fx:id=\"addDeleteBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addDeleteBtn1 != null : "fx:id=\"addDeleteBtn1\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTab != null : "fx:id=\"userInfoTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoComboBox != null : "fx:id=\"userInfoComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTextField != null : "fx:id=\"userInfoTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoSearch != null : "fx:id=\"userInfoSearch\" was not injected: check your FXML file 'AdminUI.fxml'.";
-        assert userInfoReset != null : "fx:id=\"userInfoReset\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTableView != null : "fx:id=\"userInfoTableView\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoAdd != null : "fx:id=\"userInfoAdd\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
