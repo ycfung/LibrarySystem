@@ -25,7 +25,7 @@
                                   <children>
                                       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                           <children>
-                                              <JFXComboBox fx:id="searchComboBox" prefHeight="31.0" prefWidth="216.0" promptText="选择搜索类别">
+                                              <JFXComboBox fx:id="searchComboBox" prefHeight="31.0" prefWidth="216.0" promptText="选择搜索类型">
                                                   <HBox.margin>
                                                       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                                   </HBox.margin>
@@ -117,7 +117,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                                           <children>
-                                                              <JFXTextField fx:id="bookInfoTitle" labelFloat="true" promptText="标题">
+                                                              <JFXTextField fx:id="bookInfoTitle" labelFloat="true" promptText="书名">
                                                                   <HBox.margin>
                                                                       <Insets />
                                                                   </HBox.margin>
@@ -230,7 +230,7 @@
                               </VBox>
                           </content>
                       </Tab>
-                      <Tab fx:id="addTab" text="新增图书">
+                      <Tab fx:id="addTab" text="管理图书">
                           <content>
                               <VBox prefHeight="200.0" prefWidth="1280.0">
                                   <children>
@@ -242,7 +242,7 @@
                                                   </HBox.margin>
                                               </JFXTextField>
                                               <JFXButton fx:id="addSearch" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="搜索" textFill="WHITE" />
-                                              <JFXButton fx:id="addReset" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #f1c40f;" text="重置" textFill="WHITE">
+                                              <JFXButton fx:id="addReset" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #f1c40f;" text="刷新" textFill="WHITE">
                                                   <HBox.margin>
                                                       <Insets left="30.0" />
                                                   </HBox.margin>
@@ -254,26 +254,31 @@
                                               <Insets bottom="10.0" left="30.0" right="30.0" />
                                           </VBox.margin>
                                           <children>
-                                              <VBox alignment="TOP_CENTER">
+                                              <VBox alignment="TOP_CENTER" prefHeight="587.0" prefWidth="270.0">
                                                   <children>
                                                       <JFXTextField fx:id="addBarcode" labelFloat="true" promptText="条形码">
                                                           <VBox.margin>
                                                               <Insets bottom="30.0" left="10.0" right="10.0" top="50.0" />
                                                           </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXTextField fx:id="addTitle" labelFloat="true" promptText="标题">
+                                                      <JFXTextField fx:id="addTitle" labelFloat="true" promptText="书名">
                                                           <VBox.margin>
                                                               <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
                                                           </VBox.margin>
                                                       </JFXTextField>
                                                       <JFXTextField fx:id="addPublisher" labelFloat="true" promptText="出版社">
                                                           <VBox.margin>
-                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                              <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
                                                           </VBox.margin>
                                                       </JFXTextField>
+                                          <JFXTextField fx:id="addLocatioin" labelFloat="true" promptText="地点">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
                                                   </children>
                                               </VBox>
-                                              <VBox>
+                                              <VBox prefHeight="587.0" prefWidth="283.0">
                                                   <children>
                                                       <JFXTextField fx:id="addAuthor" labelFloat="true" promptText="作者">
                                                           <VBox.margin>
@@ -285,14 +290,19 @@
                                                               <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
                                                           </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXCheckBox fx:id="addIsBorrowable" text="可借">
+                                          <JFXTextField fx:id="addPrice" labelFloat="true" promptText="价格">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                                      <JFXCheckBox fx:id="addIsBorrowable" text="典藏">
                                                           <VBox.margin>
                                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                           </VBox.margin>
                                                       </JFXCheckBox>
                                                   </children>
                                               </VBox>
-                                              <JFXTreeTableView fx:id="addTableView" prefHeight="547.0" prefWidth="612.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
+                                              <JFXTreeTableView fx:id="addTableView" prefHeight="547.0" prefWidth="413.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
                                                   <HBox.margin>
                                                       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                                   </HBox.margin>
@@ -304,7 +314,11 @@
                                                               <Insets bottom="30.0" />
                                                           </VBox.margin>
                                                       </JFXButton>
-                                                      <JFXButton fx:id="addDeleteBtn" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #e74c3c;" text="删除" textFill="WHITE" />
+                                                      <JFXButton fx:id="addDeleteBtn" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #e74c3c;" text="删除" textFill="WHITE">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" />
+                                             </VBox.margin></JFXButton>
+                                          <JFXButton fx:id="addDeleteBtn1" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="保存" textFill="WHITE" />
                                                   </children>
                                               </VBox>
                                           </children>
@@ -330,11 +344,6 @@
                                                   </HBox.margin>
                                               </JFXTextField>
                                               <JFXButton fx:id="userInfoSearch" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="搜索" textFill="WHITE">
-                                                  <HBox.margin>
-                                                      <Insets left="30.0" />
-                                                  </HBox.margin>
-                                              </JFXButton>
-                                              <JFXButton fx:id="userInfoReset" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #f1c40f;" text="重置" textFill="WHITE">
                                                   <HBox.margin>
                                                       <Insets left="30.0" />
                                                   </HBox.margin>
