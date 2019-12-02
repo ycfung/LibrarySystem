@@ -29,8 +29,6 @@ public class Book extends RecursiveTreeObject<Book> {
     public Book() {
     }
 
-    ;
-
     public String getId() {
         return id;
     }

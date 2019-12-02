@@ -114,7 +114,7 @@ public class AdminController {
     private Tab recordTab;
 
     @FXML
-    private JFXComboBox<?> recordComboBox;
+    private JFXComboBox<String> recordComboBox;
 
     @FXML
     private JFXTextField recordTextField;
@@ -126,7 +126,7 @@ public class AdminController {
     private JFXButton recordReset;
 
     @FXML
-    private JFXTreeTableView<?> recordTableView;
+    private JFXTreeTableView<BorrowedRecord> recordTableView;
 
     @FXML
     private Tab addTab;
@@ -283,10 +283,31 @@ public class AdminController {
         //借阅记录页面的表格构建
         JFXTreeTableColumn<BorrowedRecord, String> idCol1 = new JFXTreeTableColumn<>("识别码");
         JFXTreeTableColumn<BorrowedRecord, String> nameCol1 = new JFXTreeTableColumn<>("书名");
+        JFXTreeTableColumn<BorrowedRecord, String> borrowDateCol1 = new JFXTreeTableColumn<>("借书日期");
+        JFXTreeTableColumn<BorrowedRecord, String> returnDateCol1 = new JFXTreeTableColumn<>("还书日期");
+        JFXTreeTableColumn<BorrowedRecord, String> borrowerIDCol1 = new JFXTreeTableColumn<>("借阅者ID");
+        JFXTreeTableColumn<BorrowedRecord, String> borrowerNameCol1 = new JFXTreeTableColumn<>("借阅者用户名");
+        idCol1.setPrefWidth(100);
+        nameCol1.setPrefWidth(175);
+        borrowDateCol1.setPrefWidth(250);
+        returnDateCol1.setPrefWidth(250);
+        borrowerIDCol1.setPrefWidth(100);
+        borrowerNameCol1.setPrefWidth(175);
+        idCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getID()));
+        nameCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
+        borrowDateCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBorrowDate()));
+        returnDateCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getReturnDate()));
+        borrowerIDCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBorrowerID()));
+        borrowerNameCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBorrowerName()));
+        recordTableView.getColumns().setAll(idCol1, nameCol1, borrowDateCol1, returnDateCol1, borrowerIDCol1, borrowerNameCol1);
+        recordTableView.setShowRoot(false);
+
+
         /**
          * 搜索图书页面
          */
-        searchComboBox.setItems(FXCollections.observableArrayList("按书名", "按作者", "按出版社", "按类型"));
+        searchComboBox.setItems(FXCollections.observableArrayList("按书名", "按作者", "按出版社", "按类别"));
+
         searchSearchBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             String att;
             if ("按书名".equals(searchComboBox.getValue())) {
@@ -296,7 +317,7 @@ public class AdminController {
             } else if ("按出版社".equals(searchComboBox.getValue())) {
                 att = "press";
             } else if ("按类别".equals(searchComboBox.getValue())) {
-                att = "categories";
+                att = "catego";
             } else {
                 att = null;
             }
@@ -322,17 +343,21 @@ public class AdminController {
                     b.setState("典藏");
                 }
             }
-            TreeItem<Book> root = new RecursiveTreeItem<Book>(books, RecursiveTreeObject::getChildren);
+            TreeItem<Book> root = new RecursiveTreeItem<>(books, RecursiveTreeObject::getChildren);
             searchTableView.setRoot(root);
         });
 
         searchBookInfo.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (null == bookInfo[0] || "".equals(bookInfo[0])) {
+                showMsgDialog("出错", "请先选择一本书");
+                return;
+            }
             tabpane.getSelectionModel().select(bookInfoTab);
             String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
             for (int i = 0; i < 12; i++) {
                 bookInfo[i + 1] = s[i];
                 if (s[i] == null) {
-                    bookInfo[i + 1] = "无";
+                    bookInfo[i + 1] = "暂无";
                 }
             }
             if ("0".equals(bookInfo[7])) {
@@ -343,21 +368,35 @@ public class AdminController {
                 bookInfo[7] = "典藏";
             }
             setBookInfo();
-            setBookInfo();
         });
 
         searchBookRecord.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
+            if (null == bookInfo[0] || "".equals(bookInfo[0])) {
+                showMsgDialog("出错", "请先选择一本书");
+                return;
+            }
+            tabpane.getSelectionModel().select(recordTab);
             LinkedList<String[]> linkedList = LibraryAdministrator.getRecordByID(bookInfo[0]);
+            if (linkedList.isEmpty()) {
+                showMsgDialog("", "抱歉，该书暂无借阅记录");
+                return;
+            }
+            ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
             for (String[] s : linkedList) {
+                s[2] = s[2] == null ? "暂未归还" : s[2];
                 BorrowedRecord br = new BorrowedRecord(bookInfo[0], s[0], s[1], s[2], s[3], s[4]);
                 borrowedRecords.add(br);
             }
+            recordComboBox.setValue("识别码");
+            recordTextField.setText(bookInfo[0]);
+            TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
+            recordTableView.setRoot(root);
         });
 
         searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            bookInfo[0] = newValue.getValue().getId();
+            bookInfo[0] = newValue != null ? newValue.getValue().getId() : null;
         });
+
 
         /**
          * 显示图书信息页面
@@ -368,7 +407,7 @@ public class AdminController {
             for (int i = 0; i < 12; i++) {
                 bookInfo[i + 1] = s[i];
                 if (s[i] == null) {
-                    bookInfo[i + 1] = "无";
+                    bookInfo[i + 1] = "暂无";
                 }
             }
             if ("0".equals(bookInfo[7])) {
@@ -380,6 +419,67 @@ public class AdminController {
             }
             setBookInfo();
         });
+
+
+        /**
+         * 借阅记录页面
+         */
+        recordComboBox.setItems(FXCollections.observableArrayList("识别码", "条形码"));
+
+        recordSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (recordComboBox.getValue() == null) {
+                showMsgDialog("错误", "请选择识别码/条形码");
+                return;
+            }
+            if ("".equals(recordTextField.getText())) {
+                showMsgDialog("错误", "请输入识别码/条形码");
+                return;
+            }
+            if ("识别码".equals(recordComboBox.getValue())) {
+                LinkedList<String[]> linkedList = LibraryAdministrator.getRecordByID(recordTextField.getText());
+                if (linkedList.isEmpty()) {
+                    showMsgDialog("", "抱歉，该书暂无借阅记录");
+                    return;
+                }
+                ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
+                for (String[] s : linkedList) {
+                    s[2] = s[2] == null ? "暂未归还" : s[2];
+                    BorrowedRecord br = new BorrowedRecord(recordTextField.getText(), s[0], s[1], s[2], s[3], s[4]);
+                    borrowedRecords.add(br);
+                }
+                TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
+                recordTableView.setRoot(root);
+            } else {
+                LinkedList<String[]> linkedList = LibraryAdministrator.getRecordByBarcode(recordTextField.getText());
+                if (linkedList.isEmpty()) {
+                    showMsgDialog("", "抱歉，该类书暂无借阅记录");
+                    return;
+                }
+                ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
+                for (String[] s : linkedList) {
+                    s[3] = s[3] == null ? "暂未归还" : s[3];
+                    BorrowedRecord br = new BorrowedRecord(s[0], s[1], s[2], s[3], s[4], s[5]);
+                    borrowedRecords.add(br);
+                    TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
+                    recordTableView.setRoot(root);
+                }
+            }
+        });
+
+        recordReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
+            TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
+            recordTableView.setRoot(root);
+        });
+
+        /**
+         * 管理图书页面
+         */
+
+
+        /**
+         * 管理用户界面
+         */
     }
 
     // 显示弹出信息框
@@ -414,5 +514,10 @@ public class AdminController {
         bookInfoBorrowerID.setText(bookInfo[11]);
         bookInfoBorrowerName.setText(bookInfo[12]);
         bookInfoPrice.setText(bookInfo[6]);
+    }
+
+    // recordTab 页面通过识别码显示信息
+    private void setRecordByID() {
+
     }
 }

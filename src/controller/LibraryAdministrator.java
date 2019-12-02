@@ -30,8 +30,8 @@ public class LibraryAdministrator {
 
     //�����ض����Դ����������ģ������ƥ���¼
     public static ObservableList<Book> queryByAtt(String att, String keyWord) {
-        String sql = "select id, barcode, name, category, author, press, address, state, price from barcode "
-                + "natural join book natural join address where barcode." + att + " like " + "'%" + keyWord + "%'";
+        String sql = "select id, barcode, name, catego, author, press, address, state, price from barcode "
+                + "natural join book natural join address where " + att + " like " + "'%" + keyWord + "%'";
         ObservableList books = FXCollections.observableArrayList();
         Connection con = null;
         Statement stmt = null;
@@ -427,7 +427,7 @@ public class LibraryAdministrator {
     //�����ڵ��飺�����롢״̬�����ߡ����⡢���ࡢ�����硢�۸�0�ɽ裬1�ѽ裬2��أ� =>bool���������ݿ⣩
     public static Boolean addBook(String barcode, String author, String name,
                                   String category, String press, String price) {
-        String sql = "insert into barcode(barcode,author,name,category,press,price)"
+        String sql = "insert into barcode(barcode,author,name,catego,press,price)"
                 + " values(?,?,?,?,?,?)";
         Connection con = null;
         PreparedStatement ptmt = null;
@@ -489,7 +489,7 @@ public class LibraryAdministrator {
     }
 
     public static String[] getNewRecordByID(String id) {
-        String sql = "select barcode,barcode.name,author,press,category,"
+        String sql = "select barcode,barcode.name,author,press,catego,"
                 + "price,state,address,bdate,bdate+30,borrower.id,"
                 + "borrower.name from  book natural join barcode"
                 + " natural join address  join bbook on(book.id=bbook.bkid)"
@@ -526,7 +526,6 @@ public class LibraryAdministrator {
     }
 
     public static void main(String[] args) throws SQLException {
-        String[] s = getNewRecordByID("01");
-        System.out.println(s[8] + "   " + s[9]);
+        ObservableList<Book> books=queryByAtt("catego","a ");
     }
 }

@@ -1,6 +1,8 @@
 package model;
 
-public class BorrowedRecord {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public class BorrowedRecord extends RecursiveTreeObject<BorrowedRecord> {
     private String ID;
     private String name;
     private String borrowDate;
