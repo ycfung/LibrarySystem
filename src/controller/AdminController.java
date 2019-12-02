@@ -3,6 +3,9 @@ package controller;
 import com.jfoenix.controls.*;
 
 import java.net.URL;
+import java.nio.ByteOrder;
+import java.sql.SQLOutput;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -20,6 +23,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import model.Book;
+import model.BorrowedRecord;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 
 public class AdminController {
@@ -244,6 +249,40 @@ public class AdminController {
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoApply != null : "fx:id=\"userInfoApply\" was not injected: check your FXML file 'AdminUI.fxml'.";
 
+        // 搜索图书页面的表格构建
+        JFXTreeTableColumn<Book, String> idCol = new JFXTreeTableColumn<>("识别码");
+        JFXTreeTableColumn<Book, String> barcodeCol = new JFXTreeTableColumn<>("条形码");
+        JFXTreeTableColumn<Book, String> nameCol = new JFXTreeTableColumn<>("书名");
+        JFXTreeTableColumn<Book, String> authorCol = new JFXTreeTableColumn<>("作者");
+        JFXTreeTableColumn<Book, String> pressCol = new JFXTreeTableColumn<>("出版社");
+        JFXTreeTableColumn<Book, String> categoryCol = new JFXTreeTableColumn<>("类型");
+        JFXTreeTableColumn<Book, String> priceCol = new JFXTreeTableColumn<>("价格");
+        JFXTreeTableColumn<Book, String> stateCol = new JFXTreeTableColumn<>("状态");
+        JFXTreeTableColumn<Book, String> addressCol = new JFXTreeTableColumn<>("地点");
+        idCol.setPrefWidth(90);
+        barcodeCol.setPrefWidth(90);
+        nameCol.setPrefWidth(200);
+        authorCol.setPrefWidth(100);
+        pressCol.setPrefWidth(200);
+        categoryCol.setPrefWidth(100);
+        priceCol.setPrefWidth(70);
+        stateCol.setPrefWidth(80);
+        addressCol.setPrefWidth(100);
+        idCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+        barcodeCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBarcode()));
+        nameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
+        authorCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAuthor()));
+        pressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPress()));
+        categoryCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getCategory()));
+        priceCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice()));
+        stateCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getState()));
+        addressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAddress()));
+        searchTableView.getColumns().setAll(idCol, barcodeCol, nameCol, authorCol, pressCol, categoryCol, priceCol, stateCol, addressCol);
+        searchTableView.setShowRoot(false);
+
+        //借阅记录页面的表格构建
+        JFXTreeTableColumn<BorrowedRecord, String> idCol1 = new JFXTreeTableColumn<>("识别码");
+        JFXTreeTableColumn<BorrowedRecord, String> nameCol1 = new JFXTreeTableColumn<>("书名");
         /**
          * 搜索图书页面
          */
@@ -256,82 +295,94 @@ public class AdminController {
                 att = "author";
             } else if ("按出版社".equals(searchComboBox.getValue())) {
                 att = "press";
+            } else if ("按类别".equals(searchComboBox.getValue())) {
+                att = "categories";
             } else {
-                att = "category";
+                att = null;
             }
-
+            if (att == null) {
+                showMsgDialog("错误", "请选择搜索类型");
+                return;
+            }
+            if ("".equals(searchTextField.getText())) {
+                showMsgDialog("错误", "请输入关键字");
+                return;
+            }
             ObservableList<Book> books = LibraryAdministrator.queryByAtt(att, searchTextField.getText());
             if (books.isEmpty()) {
                 showMsgDialog("", "抱歉，未找到相关书籍");
                 return;
             }
-
-            JFXTreeTableColumn<Book, String> idCol = new JFXTreeTableColumn<>("识别码");
-            JFXTreeTableColumn<Book, String> barcodeCol = new JFXTreeTableColumn<>("条形码");
-            JFXTreeTableColumn<Book, String> nameCol = new JFXTreeTableColumn<>("书名");
-            JFXTreeTableColumn<Book, String> authorCol = new JFXTreeTableColumn<>("作者");
-            JFXTreeTableColumn<Book, String> pressCol = new JFXTreeTableColumn<>("出版社");
-            JFXTreeTableColumn<Book, String> categoryCol = new JFXTreeTableColumn<>("类型");
-            JFXTreeTableColumn<Book, String> priceCol = new JFXTreeTableColumn<>("价格");
-            JFXTreeTableColumn<Book, String> stateCol = new JFXTreeTableColumn<>("状态");
-            JFXTreeTableColumn<Book, String> addressCol = new JFXTreeTableColumn<>("地点");
-
-            idCol.setPrefWidth(90);
-            barcodeCol.setPrefWidth(90);
-            nameCol.setPrefWidth(200);
-            authorCol.setPrefWidth(100);
-            pressCol.setPrefWidth(200);
-            categoryCol.setPrefWidth(100);
-            priceCol.setPrefWidth(70);
-            stateCol.setPrefWidth(85);
-            addressCol.setPrefWidth(100);
-
-            idCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
-            barcodeCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBarcode()));
-            nameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
-            authorCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAuthor()));
-            pressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPress()));
-            categoryCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getCategoty()));
-            priceCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice()));
-            stateCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getState()));
-            addressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAddress()));
-
+            for (Book b : books) {
+                if ("0".equals(b.getState())) {
+                    b.setState("可借");
+                } else if ("1".equals(b.getState())) {
+                    b.setState("已借出");
+                } else {
+                    b.setState("典藏");
+                }
+            }
             TreeItem<Book> root = new RecursiveTreeItem<Book>(books, RecursiveTreeObject::getChildren);
-            searchTableView.getColumns().setAll(idCol, barcodeCol, nameCol, authorCol, pressCol, categoryCol, priceCol, stateCol, addressCol);
             searchTableView.setRoot(root);
-            searchTableView.setShowRoot(false);
         });
 
         searchBookInfo.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             tabpane.getSelectionModel().select(bookInfoTab);
-            bookInfoTextField.setText(bookInfo[0]);
-            bookInfoID.setText(bookInfo[0]);
-            bookInfoBarcode.setText(bookInfo[1]);
-            bookInfoTitle.setText(bookInfo[2]);
-            bookInfoPublisher.setText(bookInfo[4]);
-            bookInfoAuthor.setText(bookInfo[3]);
-            bookInfoCategory.setText(bookInfo[5]);
-            bookInfoIsBorrowable.setText(bookInfo[7]);
-            bookInfoLocation.setText(bookInfo[8]);
-            bookInfoBorrowDate.setText(bookInfo[9]);
-            bookInfoReturnDate.setText(bookInfo[10]);
-            bookInfoBorrowerID.setText(bookInfo[11]);
-            bookInfoBorrowerName.setText(bookInfo[12]);
-            bookInfoPrice.setText(bookInfo[6]);
-        });
-
-        searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            bookInfo[0] = newValue.getValue().getId();
-            String[] s = LibraryAdministrator.getNewRecodeByID(bookInfo[0]);
+            String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
             for (int i = 0; i < 12; i++) {
                 bookInfo[i + 1] = s[i];
                 if (s[i] == null) {
                     bookInfo[i + 1] = "无";
                 }
             }
+            if ("0".equals(bookInfo[7])) {
+                bookInfo[7] = "可借";
+            } else if ("1".equals(bookInfo[7])) {
+                bookInfo[7] = "已借出";
+            } else {
+                bookInfo[7] = "典藏";
+            }
+            setBookInfo();
+            setBookInfo();
+        });
+
+        searchBookRecord.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
+            LinkedList<String[]> linkedList = LibraryAdministrator.getRecordByID(bookInfo[0]);
+            for (String[] s : linkedList) {
+                BorrowedRecord br = new BorrowedRecord(bookInfo[0], s[0], s[1], s[2], s[3], s[4]);
+                borrowedRecords.add(br);
+            }
+        });
+
+        searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            bookInfo[0] = newValue.getValue().getId();
+        });
+
+        /**
+         * 显示图书信息页面
+         */
+        bookInfoSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            bookInfo[0] = bookInfoTextField.getText();
+            String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
+            for (int i = 0; i < 12; i++) {
+                bookInfo[i + 1] = s[i];
+                if (s[i] == null) {
+                    bookInfo[i + 1] = "无";
+                }
+            }
+            if ("0".equals(bookInfo[7])) {
+                bookInfo[7] = "可借";
+            } else if ("1".equals(bookInfo[7])) {
+                bookInfo[7] = "已借出";
+            } else {
+                bookInfo[7] = "典藏";
+            }
+            setBookInfo();
         });
     }
 
+    // 显示弹出信息框
     private void showMsgDialog(String heading, String msg) {
         JFXDialogLayout content = new JFXDialogLayout();
         Text t = new Text(heading);
@@ -345,5 +396,23 @@ public class AdminController {
         btn.setOnAction(event -> dialog.close());
         content.setActions(btn);
         dialog.show();
+    }
+
+    // bookInfoTab 页面显示信息
+    private void setBookInfo() {
+        bookInfoTextField.setText(bookInfo[0]);
+        bookInfoID.setText(bookInfo[0]);
+        bookInfoBarcode.setText(bookInfo[1]);
+        bookInfoTitle.setText(bookInfo[2]);
+        bookInfoPublisher.setText(bookInfo[4]);
+        bookInfoAuthor.setText(bookInfo[3]);
+        bookInfoCategory.setText(bookInfo[5]);
+        bookInfoIsBorrowable.setText(bookInfo[7]);
+        bookInfoLocation.setText(bookInfo[8]);
+        bookInfoBorrowDate.setText(bookInfo[9]);
+        bookInfoReturnDate.setText(bookInfo[10]);
+        bookInfoBorrowerID.setText(bookInfo[11]);
+        bookInfoBorrowerName.setText(bookInfo[12]);
+        bookInfoPrice.setText(bookInfo[6]);
     }
 }

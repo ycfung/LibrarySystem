@@ -1,7 +1,6 @@
 package model;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.beans.property.StringProperty;
 
 public class Book extends RecursiveTreeObject<Book> {
     private String id = null;
@@ -21,7 +20,6 @@ public class Book extends RecursiveTreeObject<Book> {
         this.name = name;
         this.category = category;
         this.author = author;
-        this.press = press;
         this.address = address;
         this.state = state;
         this.press = press;
@@ -49,7 +47,7 @@ public class Book extends RecursiveTreeObject<Book> {
         this.name = name;
     }
 
-    public String getCategoty() {
+    public String getCategory() {
         return category;
     }
 
