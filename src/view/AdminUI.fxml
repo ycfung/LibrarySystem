@@ -122,7 +122,7 @@
                                                                       <Insets />
                                                                   </HBox.margin>
                                                               </JFXTextField>
-                                                              <JFXTextField fx:id="BookInfoPublisher" labelFloat="true" promptText="出版社">
+                                                              <JFXTextField fx:id="bookInfoPublisher" labelFloat="true" promptText="出版社">
                                                                   <HBox.margin>
                                                                       <Insets left="50.0" />
                                                                   </HBox.margin>
@@ -132,7 +132,7 @@
                                                                       <Insets left="50.0" />
                                                                   </HBox.margin>
                                                               </JFXTextField>
-                                                              <JFXTextField fx:id="BookInfoCategory" labelFloat="true" promptText="分类">
+                                                              <JFXTextField fx:id="bookInfoCategory" labelFloat="true" promptText="分类">
                                                                   <HBox.margin>
                                                                       <Insets left="50.0" />
                                                                   </HBox.margin>
