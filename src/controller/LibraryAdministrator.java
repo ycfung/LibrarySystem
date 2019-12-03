@@ -73,8 +73,8 @@ public class LibraryAdministrator {
     }
 
     //�������������ƥ����鱾������������ƥ���鱾����Ϣ
-    public static String[] getBookInfoByBar(String barcode) {
-        String sql = "select name,author,press,category,address,price from"
+    public static String[][] getBookInfoByBar(String barcode) {
+        /*String sql = "select name,author,press,category,address,price from"
                 + " libadm.barcode natural join libadm.address where barcode=" + barcode;
         String Info[] = new String[6];
         Connection con = null;
@@ -105,7 +105,8 @@ public class LibraryAdministrator {
                 e.printStackTrace();
             }
         }
-        return Info;
+        return Info;*/
+        return null;
     }
 
     ;
@@ -526,6 +527,6 @@ public class LibraryAdministrator {
     }
 
     public static void main(String[] args) throws SQLException {
-        ObservableList<Book> books=queryByAtt("catego","a ");
+        ObservableList<Book> books = queryByAtt("catego", "a ");
     }
 }

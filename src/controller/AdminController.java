@@ -24,6 +24,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import model.Book;
 import model.BorrowedRecord;
+import model.Borrower;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 
@@ -165,7 +166,7 @@ public class AdminController {
     private JFXCheckBox addIsBorrowable;
 
     @FXML
-    private JFXTreeTableView<?> addTableView;
+    private JFXTreeTableView<Book> addTableView;
 
     @FXML
     private JFXButton addAddBtn;
@@ -180,7 +181,7 @@ public class AdminController {
     private Tab userInfoTab;
 
     @FXML
-    private JFXComboBox<?> userInfoComboBox;
+    private JFXComboBox<String> userInfoComboBox;
 
     @FXML
     private JFXTextField userInfoTextField;
@@ -189,7 +190,7 @@ public class AdminController {
     private JFXButton userInfoSearch;
 
     @FXML
-    private JFXTreeTableView<?> userInfoTableView;
+    private JFXTreeTableView<Borrower> userInfoTableView;
 
     @FXML
     private JFXButton userInfoAdd;
@@ -313,7 +314,28 @@ public class AdminController {
         recordTableView.getColumns().setAll(idCol1, nameCol1, borrowDateCol1, returnDateCol1, borrowerIDCol1, borrowerNameCol1);
         recordTableView.setShowRoot(false);
 
+        //管理图书页面的表格构建
+        JFXTreeTableColumn<Book, String> idCol2 = new JFXTreeTableColumn<>("识别码");
+        idCol2.setPrefWidth(410);
+        idCol2.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+        addTableView.getColumns().setAll(idCol2);
+        addTableView.setShowRoot(false);
 
+        //用户信息页面的表格构建
+        JFXTreeTableColumn<Borrower, String> idCol3 = new JFXTreeTableColumn<>("用户ID");
+        JFXTreeTableColumn<Borrower, String> nameCol3 = new JFXTreeTableColumn<>("用户名");
+        JFXTreeTableColumn<Borrower, String> telCol3 = new JFXTreeTableColumn<>("电话号码");
+        JFXTreeTableColumn<Borrower, String> banlanceCol3 = new JFXTreeTableColumn<>("余额");
+        idCol3.setPrefWidth(200);
+        nameCol3.setPrefWidth(300);
+        telCol3.setPrefWidth(300);
+        banlanceCol3.setPrefWidth(300);
+        idCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+        nameCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
+        telCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getTel()));
+        banlanceCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBalance()));
+        userInfoTableView.getColumns().setAll(idCol3, nameCol3, telCol3, banlanceCol3);
+        userInfoTableView.setShowRoot(false);
         /**
          * 搜索图书页面
          */
@@ -413,6 +435,10 @@ public class AdminController {
          * 显示图书信息页面
          */
         bookInfoSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if ("".equals(bookInfoTextField.getText())) {
+                showMsgDialog("错误", "请输入识别码");
+                return;
+            }
             bookInfo[0] = bookInfoTextField.getText();
             String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
             for (int i = 0; i < 12; i++) {
@@ -486,11 +512,63 @@ public class AdminController {
         /**
          * 管理图书页面
          */
+        addSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if ("".equals(addtextField.getText())) {
+                showMsgDialog("错误", "请输入条形码");
+                return;
+            }
+            String[][] ss = LibraryAdministrator.getBookInfoByBar(addtextField.getText());
+        });
+
+        addReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
+
+        addAddBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
+        addDeleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
+        addDeleteBtn1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
 
 
         /**
          * 管理用户界面
          */
+        userInfoComboBox.setItems(FXCollections.observableArrayList("查询用户信息", "查询用户借阅记录"));
+
+        userInfoSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (null == userInfoComboBox.getValue() || "".equals(userInfoComboBox.getValue())) {
+                showMsgDialog("错误", "请选择搜索类型");
+                return;
+            }
+            if ("".equals(userInfoTextField.getText())) {
+                showMsgDialog("错误", "请输入用户ID");
+                return;
+            }
+            if ("查询用户信息".equals(userInfoComboBox.getValue())) {
+
+            }
+           /* ObservableList<Book> books = LibraryAdministrator.queryByAtt(att, searchTextField.getText());
+            if (books.isEmpty()) {
+                showMsgDialog("", "抱歉，未找到相关书籍");
+                return;
+            }
+            for (Book b : books) {
+                if ("0".equals(b.getState())) {
+                    b.setState("可借");
+                } else if ("1".equals(b.getState())) {
+                    b.setState("已借出");
+                } else {
+                    b.setState("典藏");
+                }
+            }
+            TreeItem<Book> root = new RecursiveTreeItem<>(books, RecursiveTreeObject::getChildren);
+            searchTableView.setRoot(root);*/
+        });
     }
 
     // 显示弹出信息框
@@ -525,10 +603,5 @@ public class AdminController {
         bookInfoBorrowerID.setText(bookInfo[11]);
         bookInfoBorrowerName.setText(bookInfo[12]);
         bookInfoPrice.setText(bookInfo[6]);
-    }
-
-    // recordTab 页面通过识别码显示信息
-    private void setRecordByID() {
-
     }
 }
