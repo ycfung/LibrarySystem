@@ -24,6 +24,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import model.Book;
 import model.BorrowedRecord;
+import model.Borrower;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 
@@ -93,9 +94,6 @@ public class AdminController {
     private JFXTextField bookInfoIsBorrowable;
 
     @FXML
-    private JFXTextField bookInfoPrice;
-
-    @FXML
     private JFXTextField bookInfoLocation;
 
     @FXML
@@ -109,6 +107,9 @@ public class AdminController {
 
     @FXML
     private JFXTextField bookInfoBorrowerName;
+
+    @FXML
+    private JFXTextField bookInfoPrice;
 
     @FXML
     private Tab recordTab;
@@ -150,16 +151,22 @@ public class AdminController {
     private JFXTextField addPublisher;
 
     @FXML
+    private JFXTextField addLocatioin;
+
+    @FXML
     private JFXTextField addAuthor;
 
     @FXML
     private JFXTextField addcategory;
 
     @FXML
+    private JFXTextField addPrice;
+
+    @FXML
     private JFXCheckBox addIsBorrowable;
 
     @FXML
-    private JFXTreeTableView<?> addTableView;
+    private JFXTreeTableView<Book> addTableView;
 
     @FXML
     private JFXButton addAddBtn;
@@ -168,10 +175,13 @@ public class AdminController {
     private JFXButton addDeleteBtn;
 
     @FXML
+    private JFXButton addDeleteBtn1;
+
+    @FXML
     private Tab userInfoTab;
 
     @FXML
-    private JFXComboBox<?> userInfoComboBox;
+    private JFXComboBox<String> userInfoComboBox;
 
     @FXML
     private JFXTextField userInfoTextField;
@@ -180,10 +190,7 @@ public class AdminController {
     private JFXButton userInfoSearch;
 
     @FXML
-    private JFXButton userInfoReset;
-
-    @FXML
-    private JFXTreeTableView<?> userInfoTableView;
+    private JFXTreeTableView<Borrower> userInfoTableView;
 
     @FXML
     private JFXButton userInfoAdd;
@@ -199,6 +206,7 @@ public class AdminController {
     @FXML
     void initialize() {
         assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert tabpane != null : "fx:id=\"tabpane\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchTab != null : "fx:id=\"searchTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchComboBox != null : "fx:id=\"searchComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert searchTextField != null : "fx:id=\"searchTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -216,10 +224,12 @@ public class AdminController {
         assert bookInfoAuthor != null : "fx:id=\"bookInfoAuthor\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoCategory != null : "fx:id=\"BookInfoCategory\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoIsBorrowable != null : "fx:id=\"bookInfoIsBorrowable\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoLocation != null : "fx:id=\"bookInfoLocation\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowDate != null : "fx:id=\"bookInfoBorrowDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoReturnDate != null : "fx:id=\"bookInfoReturnDate\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowerID != null : "fx:id=\"bookInfoBorrowerID\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert bookInfoBorrowerName != null : "fx:id=\"bookInfoBorrowerName\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoPrice != null : "fx:id=\"bookInfoPrice\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordTab != null : "fx:id=\"recordTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordComboBox != null : "fx:id=\"recordComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordTextField != null : "fx:id=\"recordTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -233,17 +243,19 @@ public class AdminController {
         assert addBarcode != null : "fx:id=\"addBarcode\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addTitle != null : "fx:id=\"addTitle\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addPublisher != null : "fx:id=\"addPublisher\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addLocatioin != null : "fx:id=\"addLocatioin\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addAuthor != null : "fx:id=\"addAuthor\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addcategory != null : "fx:id=\"addcategory\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addPrice != null : "fx:id=\"addPrice\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addIsBorrowable != null : "fx:id=\"addIsBorrowable\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addTableView != null : "fx:id=\"addTableView\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addAddBtn != null : "fx:id=\"addAddBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addDeleteBtn != null : "fx:id=\"addDeleteBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addDeleteBtn1 != null : "fx:id=\"addDeleteBtn1\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTab != null : "fx:id=\"userInfoTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoComboBox != null : "fx:id=\"userInfoComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTextField != null : "fx:id=\"userInfoTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoSearch != null : "fx:id=\"userInfoSearch\" was not injected: check your FXML file 'AdminUI.fxml'.";
-        assert userInfoReset != null : "fx:id=\"userInfoReset\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTableView != null : "fx:id=\"userInfoTableView\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoAdd != null : "fx:id=\"userInfoAdd\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -302,7 +314,28 @@ public class AdminController {
         recordTableView.getColumns().setAll(idCol1, nameCol1, borrowDateCol1, returnDateCol1, borrowerIDCol1, borrowerNameCol1);
         recordTableView.setShowRoot(false);
 
+        //管理图书页面的表格构建
+        JFXTreeTableColumn<Book, String> idCol2 = new JFXTreeTableColumn<>("识别码");
+        idCol2.setPrefWidth(410);
+        idCol2.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+        addTableView.getColumns().setAll(idCol2);
+        addTableView.setShowRoot(false);
 
+        //用户信息页面的表格构建
+        JFXTreeTableColumn<Borrower, String> idCol3 = new JFXTreeTableColumn<>("用户ID");
+        JFXTreeTableColumn<Borrower, String> nameCol3 = new JFXTreeTableColumn<>("用户名");
+        JFXTreeTableColumn<Borrower, String> telCol3 = new JFXTreeTableColumn<>("电话号码");
+        JFXTreeTableColumn<Borrower, String> banlanceCol3 = new JFXTreeTableColumn<>("余额");
+        idCol3.setPrefWidth(200);
+        nameCol3.setPrefWidth(300);
+        telCol3.setPrefWidth(300);
+        banlanceCol3.setPrefWidth(300);
+        idCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+        nameCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
+        telCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getTel()));
+        banlanceCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBalance()));
+        userInfoTableView.getColumns().setAll(idCol3, nameCol3, telCol3, banlanceCol3);
+        userInfoTableView.setShowRoot(false);
         /**
          * 搜索图书页面
          */
@@ -402,6 +435,10 @@ public class AdminController {
          * 显示图书信息页面
          */
         bookInfoSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if ("".equals(bookInfoTextField.getText())) {
+                showMsgDialog("错误", "请输入识别码");
+                return;
+            }
             bookInfo[0] = bookInfoTextField.getText();
             String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
             for (int i = 0; i < 12; i++) {
@@ -475,11 +512,63 @@ public class AdminController {
         /**
          * 管理图书页面
          */
+        addSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if ("".equals(addtextField.getText())) {
+                showMsgDialog("错误", "请输入条形码");
+                return;
+            }
+            String[][] ss = LibraryAdministrator.getBookInfoByBar(addtextField.getText());
+        });
+
+        addReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
+
+        addAddBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
+        addDeleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
+        addDeleteBtn1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        });
 
 
         /**
          * 管理用户界面
          */
+        userInfoComboBox.setItems(FXCollections.observableArrayList("查询用户信息", "查询用户借阅记录"));
+
+        userInfoSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (null == userInfoComboBox.getValue() || "".equals(userInfoComboBox.getValue())) {
+                showMsgDialog("错误", "请选择搜索类型");
+                return;
+            }
+            if ("".equals(userInfoTextField.getText())) {
+                showMsgDialog("错误", "请输入用户ID");
+                return;
+            }
+            if ("查询用户信息".equals(userInfoComboBox.getValue())) {
+
+            }
+           /* ObservableList<Book> books = LibraryAdministrator.queryByAtt(att, searchTextField.getText());
+            if (books.isEmpty()) {
+                showMsgDialog("", "抱歉，未找到相关书籍");
+                return;
+            }
+            for (Book b : books) {
+                if ("0".equals(b.getState())) {
+                    b.setState("可借");
+                } else if ("1".equals(b.getState())) {
+                    b.setState("已借出");
+                } else {
+                    b.setState("典藏");
+                }
+            }
+            TreeItem<Book> root = new RecursiveTreeItem<>(books, RecursiveTreeObject::getChildren);
+            searchTableView.setRoot(root);*/
+        });
     }
 
     // 显示弹出信息框
@@ -514,10 +603,5 @@ public class AdminController {
         bookInfoBorrowerID.setText(bookInfo[11]);
         bookInfoBorrowerName.setText(bookInfo[12]);
         bookInfoPrice.setText(bookInfo[6]);
-    }
-
-    // recordTab 页面通过识别码显示信息
-    private void setRecordByID() {
-
     }
 }
