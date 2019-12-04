@@ -168,12 +168,12 @@ public class LibraryAdministrator {
 
     //ʶ���� => ��һ����Ľ��ļ�¼��ȡ��(1=>������2=>�������ڣ�3=>�������ڣ�4=>������id��5=>�û���)
     public static LinkedList<String[]> getRecordByID(String id) {
-        String sql1 = "select barcode.name,bbook.bdate,borrower.id,borrower.name from bbook join"
-                + " book on(bbook.bkid=book.id) join borrower on(bbook.brid=borrower.id) join"
-                + " barcode on (book.barcode=barcode.barcode) where book.id=" + id;
-        String sql2 = "select barcode.name,rbook.bdate,rbook.rdate,borrower.id,borrower.name from rbook join"
-                + " book on(rbook.bkid=book.id) join borrower on(rbook.brid=borrower.id) join"
-                + " barcode on (book.barcode=barcode.barcode) where book.id=" + id;
+        String sql1 = "select barcode.name, bbook.bdate, borrower.id, borrower.name from bbook join"
+                + " book on(bbook.bkid = book.id) join borrower on(bbook.brid = borrower.id) join"
+                + " barcode on (book.barcode = barcode.barcode) where book.id =" + id;
+        String sql2 = "select barcode.name, rbook.bdate, rbook.rdate, borrower.id,borrower.name from rbook join"
+                + " book on(rbook.bkid = book.id) join borrower on(rbook.brid = borrower.id) join"
+                + " barcode on (book.barcode = barcode.barcode) where book.id =" + id;
         LinkedList records = new LinkedList<String[]>();
         Connection con = null;
         Statement stmt = null;
@@ -221,7 +221,7 @@ public class LibraryAdministrator {
     }
 
     public static Borrower getUserInfo(String ID) {
-        String sql = "select id,name,balance,tel from libadm.borrower where ID=" + ID;
+        String sql = "select id, name, balance, tel from libadm.borrower where ID=" + ID;
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -231,7 +231,7 @@ public class LibraryAdministrator {
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                borrower = new Borrower(rs.getString(1), rs.getString(1), rs.getString(1), rs.getString(1));
+                borrower = new Borrower(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -524,6 +524,79 @@ public class LibraryAdministrator {
             }
         }
         return record;
+    }
+
+    public static String[][] getBookInfoByBarcode(String barcode) {
+        String sql1 = "select name,author,press,catego,address,price"
+                + " from barcode natural join address where barcode=" + barcode;
+        String sql2 = "select state,id from book where barcode=" + barcode;
+        String sql3 = "select count(*) from book where barcode=" + barcode;
+        String[][] info = new String[8][];
+        Connection con = null;
+        Statement stmt = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
+        ResultSet rs1 = null;
+        ResultSet rs2 = null;
+        ResultSet rs3 = null;
+        try {
+            con = getAdmConnection();
+            stmt = con.createStatement();
+            stmt2 = con.createStatement();
+            stmt3 = con.createStatement();
+            rs1 = stmt.executeQuery(sql1);
+            rs2 = stmt2.executeQuery(sql2);
+            rs3 = stmt3.executeQuery(sql3);
+            int count = 0;
+            while (rs3.next()) {
+                count = rs3.getInt(1);
+            }
+            String[] state = null;
+            String[] id = null;
+            if (count != 0) {
+                state = new String[count];
+                id = new String[count];
+            }
+            info[6] = state;
+            info[7] = id;
+            while (rs1.next()) {
+                for (int i = 0; i < 6; i++) {
+                    String[] s = new String[1];
+                    s[0] = rs1.getString(i + 1);
+                    info[i] = s;
+                }
+            }
+            int i = 0;
+            while (rs2.next()) {
+                state[i] = rs2.getString(1);
+                id[i] = rs2.getString(2);
+                i += 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+
+                if (rs1 != null)
+                    rs1.close();
+                if (rs2 != null)
+                    rs2.close();
+                if (rs3 != null)
+                    rs3.close();
+                if (stmt != null)
+                    stmt.close();
+                if (stmt2 != null)
+                    stmt.close();
+                if (stmt3 != null)
+                    stmt.close();
+                if (con != null)
+                    con.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return info;
     }
 
     public static void main(String[] args) throws SQLException {
