@@ -3,13 +3,11 @@ package controller;
 import com.jfoenix.controls.*;
 
 import java.net.URL;
-import java.nio.ByteOrder;
-import java.sql.SQLOutput;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.sun.prism.impl.shape.BasicRoundRectRep;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,8 +25,6 @@ import model.Book;
 import model.BorrowedRecord;
 import model.Borrower;
 import model.Id;
-import oracle.sql.NUMBER;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 
 public class AdminController {
@@ -216,8 +212,13 @@ public class AdminController {
     @FXML
     private JFXTextField userInfoBalance;
 
-    private String[] bookInfo = new String[13];
+    @FXML
+    private JFXButton userInfoReset;
 
+    @FXML
+    private JFXTextField userInfoPassword;
+
+    private String[] bookInfo = new String[13];
 
     @FXML
     void initialize() {
@@ -306,7 +307,7 @@ public class AdminController {
         nameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
         authorCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAuthor()));
         pressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPress()));
-        categoryCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getCategory()));
+        categoryCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getCatego()));
         priceCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getPrice()));
         stateCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getState()));
         addressCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getAddress()));
@@ -347,8 +348,8 @@ public class AdminController {
         JFXTreeTableColumn<BorrowedRecord, String> borrowDateCol3 = new JFXTreeTableColumn<>("借书日期");
         JFXTreeTableColumn<BorrowedRecord, String> returnDateCol3 = new JFXTreeTableColumn<>("还书日期");
         nameCol3.setPrefWidth(200);
-        borrowDateCol3.setPrefWidth(280);
-        returnDateCol3.setPrefWidth(280);
+        borrowDateCol3.setPrefWidth(200);
+        returnDateCol3.setPrefWidth(200);
         nameCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
         borrowDateCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBorrowDate()));
         returnDateCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getReturnDate()));
@@ -460,6 +461,10 @@ public class AdminController {
             }
             bookInfo[0] = bookInfoTextField.getText();
             String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
+            if (s[0] == null) {
+                showMsgDialog("错误", "暂无该书");
+                return;
+            }
             for (int i = 0; i < 12; i++) {
                 bookInfo[i + 1] = s[i];
                 if (s[i] == null) {
@@ -525,8 +530,8 @@ public class AdminController {
 
         recordReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             recordTableView.setRoot(null);
-            recordComboBox.setValue(null);
-            recordTextField.setText(null);
+            recordComboBox.setValue("");
+            recordTextField.setText("");
         });
 
         /**
@@ -539,7 +544,7 @@ public class AdminController {
                 return;
             }
             String[][] ss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
-            if (ss == null) {
+            if (ss[0] == null) {
                 showMsgDialog("错误", "不存在该书");
                 return;
             }
@@ -565,38 +570,19 @@ public class AdminController {
         });
 
         addReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            if ("".equals(addtextField.getText())) {
-                showMsgDialog("错误", "请输入条形码");
-                return;
-            }
-            String[][] ss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
-            if (ss == null) {
-                showMsgDialog("错误", "不存在该书");
-                return;
-            }
-            addBarcode.setText(addtextField.getText());
-            addTitle.setText(ss[0][0]);
-            addAuthor.setText(ss[1][0]);
-            addPublisher.setText(ss[2][0]);
-            addcategory.setText(ss[3][0]);
-            addLocatioin.setText(ss[4][0]);
-            addPrice.setText(ss[5][0]);
-            if ("0".equals(ss[6][0]) || "1".equals(ss[6][0])) {
-                addIsBorrowable.setDisable(true);
-            } else {
-                addIsBorrowable.setSelected(true);
-            }
-            ObservableList<Id> ids = FXCollections.observableArrayList();
-            for (String s : ss[7]) {
-                Id id = new Id(s);
-                ids.add(id);
-            }
-            TreeItem<Id> root = new RecursiveTreeItem<>(ids, RecursiveTreeObject::getChildren);
-            addTableView.setRoot(root);
+            addtextField.setText("");
+            addBarcode.setText("");
+            addTitle.setText("");
+            addPublisher.setText("");
+            addLocatioin.setText("");
+            addAuthor.setText("");
+            addPrice.setText("");
+            addIsBorrowable.setSelected(false);
+            addIsBorrowable.setDisable(false);
+            addTableView.setRoot(null);
         });
 
         addAddBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-
         });
 
         addDeleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -629,11 +615,125 @@ public class AdminController {
             LinkedList<String[]> linkedList = LibraryAdministrator.getRecordByUserID(userInfoTextField.getText());
             ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
             for (String[] s : linkedList) {
+                if (s[2] == null) {
+                    s[2] = "暂未归还";
+                }
                 BorrowedRecord br = new BorrowedRecord(null, s[0], s[1], s[2], null, null);
                 borrowedRecords.add(br);
             }
             TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
             userInfoTableView.setRoot(root);
+            userInfoID.setDisable(true);
+        });
+
+        userInfoReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            userInfoTextField.setText("");
+            userInfoID.setText("");
+            userInfoName.setText("");
+            userInfoPhone.setText("");
+            userInfoBalance.setText("");
+            userInfoID.setDisable(false);
+            userInfoPassword.setText("");
+            userInfoTableView.setRoot(null);
+        });
+
+        userInfoAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (userInfoID.isDisable()) {
+                showMsgDialog("错误", "已存在该用户ID，请先清空");
+                return;
+            }
+            if ("".equals(userInfoID.getText())) {
+                showMsgDialog("错误", "请输入用户ID");
+                return;
+            }
+            if ("".equals(userInfoName.getText())) {
+                showMsgDialog("错误", "请输入用户名");
+                return;
+            }
+            if ("".equals(userInfoPhone.getText())) {
+                showMsgDialog("错误", "请输入电话号码");
+                return;
+            }
+            if ("".equals(userInfoPassword.getText())) {
+                showMsgDialog("错误", "请输入密码");
+                return;
+            }
+            if ("".equals(userInfoBalance.getText())) {
+                showMsgDialog("错误", "请输入余额");
+                return;
+            }
+            Boolean flag = LibraryAdministrator.addUser(userInfoID.getText(), userInfoPassword.getText(), userInfoName.getText(),
+                    userInfoPhone.getText(), userInfoBalance.getText());
+            if (flag) {
+                showMsgDialog("成功", "添加新用户成功");
+                userInfoTextField.setText(null);
+                userInfoID.setText(null);
+                userInfoName.setText(null);
+                userInfoPhone.setText(null);
+                userInfoBalance.setText(null);
+                userInfoPassword.setText(null);
+                userInfoID.setDisable(false);
+            } else {
+                showMsgDialog("错误", "添加新用户失败");
+            }
+        });
+
+        userInfoDelete.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (!userInfoID.isDisable()) {
+                showMsgDialog("错误", "请先搜索一个用户");
+                return;
+            }
+            Boolean flag = LibraryAdministrator.delUser(userInfoID.getText());
+            if (flag) {
+                showMsgDialog("成功", "删除用户成功");
+                userInfoTextField.setText("");
+                userInfoID.setText("");
+                userInfoName.setText("");
+                userInfoPhone.setText("");
+                userInfoBalance.setText("");
+                userInfoPassword.setText("");
+                userInfoID.setDisable(false);
+            } else {
+                showMsgDialog("错误", "删除用户失败");
+            }
+        });
+
+        userInfoApply.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (!userInfoID.isDisable()) {
+                showMsgDialog("错误", "请先搜索一个用户");
+                return;
+            }
+            if (null == userInfoName.getText() || "".equals(userInfoName.getText())) {
+                showMsgDialog("错误", "请输入新的用户名");
+                return;
+            }
+            if (null == userInfoPhone || "".equals(userInfoPhone.getText())) {
+                showMsgDialog("错误", "请输入新的电话号码");
+                return;
+            }
+            if (null == userInfoPassword || "".equals(userInfoPassword.getText())) {
+                showMsgDialog("错误", "请输入新的密码");
+                return;
+            }
+            if (null == userInfoBalance || "".equals(userInfoBalance.getText())) {
+                showMsgDialog("错误", "请输入新的余额");
+                return;
+            }
+            Boolean flag = LibraryAdministrator.update(userInfoID.getText(), userInfoPassword.getText(), userInfoName.getText(),
+                    userInfoPhone.getText(), userInfoBalance.getText());
+            if (flag) {
+                showMsgDialog("成功", "更新用户信息成功");
+                userInfoTextField.setText("");
+                userInfoID.setText("");
+                userInfoName.setText("");
+                userInfoPhone.setText("");
+                userInfoBalance.setText("");
+                userInfoPassword.setText("");
+                userInfoID.setDisable(false);
+                userInfoTableView.setRoot(null);
+            } else {
+                showMsgDialog("错误", "删除用户信息失败");
+            }
         });
     }
 

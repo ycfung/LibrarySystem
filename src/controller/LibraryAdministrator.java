@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Book;
 import model.Borrower;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class LibraryAdministrator {
     static {
@@ -30,7 +32,7 @@ public class LibraryAdministrator {
 
     //�����ض����Դ����������ģ������ƥ���¼
     public static ObservableList<Book> queryByAtt(String att, String keyWord) {
-        String sql = "select id, barcode, name, catego, author, press, address, state, price from barcode "
+        String sql = "select id,barcode,name,catego,author,press,address,state,price from barcode "
                 + "natural join book natural join address where " + att + " like " + "'%" + keyWord + "%'";
         ObservableList books = FXCollections.observableArrayList();
         Connection con = null;
@@ -49,7 +51,7 @@ public class LibraryAdministrator {
                 book.setAuthor(rs.getString(5));
                 book.setPress(rs.getString(6));
                 book.setAddress(rs.getString(7));
-                book.setCategory(rs.getString(4));
+                book.setCatego(rs.getString(4));
                 book.setPrice(rs.getString(9));
                 books.add(book);
             }
@@ -73,9 +75,9 @@ public class LibraryAdministrator {
     }
 
     //�������������ƥ����鱾������������ƥ���鱾����Ϣ
-    public static String[][] getBookInfoByBar(String barcode) {
-        /*String sql = "select name,author,press,category,address,price from"
-                + " libadm.barcode natural join libadm.address where barcode=" + barcode;
+    public static String[] getBookInfoByBar(String barcode) {
+        String sql = "select name,author,press,catego,address,price from"
+                + " libadm.barcode natural join libadm.address where barcode=\'" + barcode + "\'";
         String Info[] = new String[6];
         Connection con = null;
         Statement stmt = null;
@@ -105,8 +107,7 @@ public class LibraryAdministrator {
                 e.printStackTrace();
             }
         }
-        return Info;*/
-        return null;
+        return Info;
     }
 
     ;
@@ -116,10 +117,10 @@ public class LibraryAdministrator {
     public static LinkedList<String[]> getRecordByBarcode(String barcode) {
         String sql1 = "select bkid,barcode.name,bdate,brid,borrower.name from bbook "
                 + "join book on(bbook.bkid=book.id) natural join barcode join"
-                + " borrower on(bbook.brid=borrower.id) where barcode=" + barcode;
+                + " borrower on(bbook.brid=borrower.id) where barcode=\'" + barcode + "\'";
         String sql2 = "select bkid,barcode.name,bdate,rdate,brid,borrower.name from rbook "
                 + "join book on(rbook.bkid=book.id) natural join barcode join"
-                + " borrower on(rbook.brid=borrower.id) where barcode=" + barcode;
+                + " borrower on(rbook.brid=borrower.id) where barcode=\'" + barcode + "\'";
         LinkedList records = new LinkedList<String[]>();
         Connection con = null;
         Statement stmt = null;
@@ -168,12 +169,12 @@ public class LibraryAdministrator {
 
     //ʶ���� => ��һ����Ľ��ļ�¼��ȡ��(1=>������2=>�������ڣ�3=>�������ڣ�4=>������id��5=>�û���)
     public static LinkedList<String[]> getRecordByID(String id) {
-        String sql1 = "select barcode.name, bbook.bdate, borrower.id, borrower.name from bbook join"
-                + " book on(bbook.bkid = book.id) join borrower on(bbook.brid = borrower.id) join"
-                + " barcode on (book.barcode = barcode.barcode) where book.id =" + id;
-        String sql2 = "select barcode.name, rbook.bdate, rbook.rdate, borrower.id,borrower.name from rbook join"
-                + " book on(rbook.bkid = book.id) join borrower on(rbook.brid = borrower.id) join"
-                + " barcode on (book.barcode = barcode.barcode) where book.id =" + id;
+        String sql1 = "select barcode.name,bbook.bdate,borrower.id,borrower.name from bbook join"
+                + " book on(bbook.bkid=book.id) join borrower on(bbook.brid=borrower.id) join"
+                + " barcode on (book.barcode=barcode.barcode) where book.id=\'" + id + "\'";
+        String sql2 = "select barcode.name,rbook.bdate,rbook.rdate,borrower.id,borrower.name from rbook join"
+                + " book on(rbook.bkid=book.id) join borrower on(rbook.brid=borrower.id) join"
+                + " barcode on (book.barcode=barcode.barcode) where book.id=\'" + id + "\'";
         LinkedList records = new LinkedList<String[]>();
         Connection con = null;
         Statement stmt = null;
@@ -221,7 +222,7 @@ public class LibraryAdministrator {
     }
 
     public static Borrower getUserInfo(String ID) {
-        String sql = "select id, name, balance, tel from libadm.borrower where ID=" + ID;
+        String sql = "select id,name,tel,balance from libadm.borrower where ID=\'" + ID + "\'";
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -254,10 +255,10 @@ public class LibraryAdministrator {
     //�û�id=>���û����ļ�¼
     //String(1=>������2=>�������ڣ�3=>��������)
     public static LinkedList<String[]> getRecordByUserID(String id) {
-        String sql1 = "select barcode.name,bbook.bdate from bbook join book on(bbook.bkid=book.id)"
-                + " natural join barcode where bbook.brid=" + id;
-        String sql2 = "select barcode.name,rbook.bdate ,rbook.rdate from rbook join book on(rbook.bkid=book.id)"
-                + " natural join barcode where rbook.brid=" + id;
+        String sql1 = "select barcode.name,bbook.bdate from bbook join book on(bbook.bkid=book.ID)"
+                + " natural join barcode where bbook.brid=\'" + id + "\'";
+        String sql2 = "select barcode.name,rbook.bdate ,rbook.rdate from rbook join book on(rbook.bkid=book.ID)"
+                + " natural join barcode where rbook.brid=\'" + id + "\'";
         LinkedList records = new LinkedList<String[]>();
         Connection con = null;
         Statement stmt = null;
@@ -322,6 +323,7 @@ public class LibraryAdministrator {
             e.printStackTrace();
         } finally {
             try {
+
                 if (ptmt != null)
                     ptmt.close();
                 if (con != null)
@@ -382,6 +384,7 @@ public class LibraryAdministrator {
             e.printStackTrace();
         } finally {
             try {
+
                 if (ptmt != null)
                     ptmt.close();
                 if (con != null)
@@ -413,6 +416,7 @@ public class LibraryAdministrator {
             e.printStackTrace();
         } finally {
             try {
+
                 if (ptmt != null)
                     ptmt.close();
                 if (con != null)
@@ -427,7 +431,7 @@ public class LibraryAdministrator {
 
     //�����ڵ��飺�����롢״̬�����ߡ����⡢���ࡢ�����硢�۸�0�ɽ裬1�ѽ裬2��أ� =>bool���������ݿ⣩
     public static Boolean addBook(String barcode, String author, String name,
-                                  String category, String press, String price) {
+                                  String categories, String press, String price) {
         String sql = "insert into barcode(barcode,author,name,catego,press,price)"
                 + " values(?,?,?,?,?,?)";
         Connection con = null;
@@ -439,7 +443,7 @@ public class LibraryAdministrator {
             ptmt.setString(1, barcode);
             ptmt.setString(2, author);
             ptmt.setString(3, name);
-            ptmt.setString(4, category);
+            ptmt.setString(4, categories);
             ptmt.setString(5, press);
             ptmt.setString(6, price);
             int count = ptmt.executeUpdate();
@@ -449,6 +453,7 @@ public class LibraryAdministrator {
             e.printStackTrace();
         } finally {
             try {
+
                 if (ptmt != null)
                     ptmt.close();
                 if (con != null)
@@ -463,7 +468,7 @@ public class LibraryAdministrator {
 
     //���ڵ��飺ʶ���� => bool��ɾ��һ��������ݣ�
     public static Boolean delBook(String id) {
-        String sql = "delete from book where id=" + id;
+        String sql = "delete from book where id=\'" + id + "\'";
         Connection con = null;
         Statement ptmt = null;
         Boolean flag = false;
@@ -494,7 +499,7 @@ public class LibraryAdministrator {
                 + "price,state,address,bdate,bdate+30,borrower.id,"
                 + "borrower.name from  book natural join barcode"
                 + " natural join address  join bbook on(book.id=bbook.bkid)"
-                + "  join borrower on(borrower.id=bbook.brid) where book.id=" + id;
+                + "  join borrower on(borrower.id=bbook.brid) where book.id=\'" + id + "\'";
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -512,6 +517,7 @@ public class LibraryAdministrator {
             e.printStackTrace();
         } finally {
             try {
+
                 if (rs != null)
                     rs.close();
                 if (stmt != null)
@@ -528,9 +534,9 @@ public class LibraryAdministrator {
 
     public static String[][] getBookInfoByBarcode(String barcode) {
         String sql1 = "select name,author,press,catego,address,price"
-                + " from barcode natural join address where barcode=" + barcode;
-        String sql2 = "select state,id from book where barcode=" + barcode;
-        String sql3 = "select count(*) from book where barcode=" + barcode;
+                + " from barcode natural join address where barcode=\'" + barcode + "\'";
+        String sql2 = "select state,id from book where barcode=\'" + barcode + "\'";
+        String sql3 = "select count(*) from book where barcode=\'" + barcode + "\'";
         String[][] info = new String[8][];
         Connection con = null;
         Statement stmt = null;
@@ -600,6 +606,16 @@ public class LibraryAdministrator {
     }
 
     public static void main(String[] args) throws SQLException {
-        ObservableList<Book> books = queryByAtt("catego", "a ");
+			/*Connection con=getAdmConnection();
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery("select barcode,address from barcode natural join"
+					+ " address where barcode="+"01");
+			while(rs.next()) {
+				System.out.println("address: "+rs.getString(2));
+			}*/
+
+        String[] s = getNewRecordByID("01");
+        System.out.println(s.length);
+
     }
 }

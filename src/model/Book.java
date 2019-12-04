@@ -45,11 +45,11 @@ public class Book extends RecursiveTreeObject<Book> {
         this.name = name;
     }
 
-    public String getCategory() {
+    public String getCatego() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCatego(String category) {
         this.category = category;
     }
 
