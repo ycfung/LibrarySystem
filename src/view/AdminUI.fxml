@@ -302,7 +302,7 @@
                                                       </JFXCheckBox>
                                                   </children>
                                               </VBox>
-                                              <JFXTreeTableView fx:id="addTableView" prefHeight="547.0" prefWidth="413.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
+                                              <JFXTreeTableView fx:id="addTableView" prefHeight="547.0" prefWidth="433.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
                                                   <HBox.margin>
                                                       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                                   </HBox.margin>
@@ -318,7 +318,7 @@
                                              <VBox.margin>
                                                 <Insets bottom="30.0" />
                                              </VBox.margin></JFXButton>
-                                          <JFXButton fx:id="addDeleteBtn1" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="保存" textFill="WHITE" />
+                                          <JFXButton fx:id="addSaveBtn" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #34495e;" text="保存" textFill="WHITE" />
                                                   </children>
                                               </VBox>
                                           </children>
@@ -338,7 +338,7 @@
                                                       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                                   </HBox.margin>
                                               </JFXComboBox>
-                                              <JFXTextField fx:id="userInfoTextField" promptText="输入关键字" unFocusColor="#4059a9">
+                                              <JFXTextField fx:id="userInfoTextField" promptText="输入用户ID" unFocusColor="#4059a9">
                                                   <HBox.margin>
                                                       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                                   </HBox.margin>
@@ -352,12 +352,47 @@
                                       </HBox>
                                       <HBox alignment="CENTER_LEFT" prefHeight="584.0" prefWidth="1280.0">
                                           <children>
-                                              <JFXTreeTableView fx:id="userInfoTableView" prefHeight="524.0" prefWidth="1106.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
-                                                  <HBox.margin>
-                                                      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                                                  </HBox.margin>
-                                              </JFXTreeTableView>
-                                              <VBox alignment="CENTER">
+                                    <VBox prefHeight="584.0" prefWidth="410.0">
+                                       <children>
+                                          <JFXTextField fx:id="userInfoID" promptText="用户ID">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="userInfoName" promptText="用户名">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="userInfoPhone" promptText="电话号码">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="userInfoBalance" promptText="余额">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets top="20.0" />
+                                       </HBox.margin>
+                                    </VBox>
+                                    <VBox alignment="CENTER">
+                                       <HBox.margin>
+                                          <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                       </HBox.margin>
+                                       <children>
+                                          <Label text="用户借阅书籍">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                                    <JFXTreeTableView fx:id="userInfoTableView" prefHeight="524.0" prefWidth="821.0" style="-fx-background-color: transparent; -fx-border-color: grey;" />
+                                       </children>
+                                    </VBox>
+                                              <VBox alignment="CENTER" prefHeight="584.0" prefWidth="253.0">
                                                   <children>
                                                       <JFXButton fx:id="userInfoAdd" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #27ae60;" text="增加" textFill="WHITE" />
                                                       <JFXButton fx:id="userInfoDelete" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #e74c3c;" text="删除" textFill="WHITE">
