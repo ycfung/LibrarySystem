@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.sun.prism.impl.shape.BasicRoundRectRep;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,8 @@ import javafx.scene.text.Text;
 import model.Book;
 import model.BorrowedRecord;
 import model.Borrower;
+import model.Id;
+import oracle.sql.NUMBER;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 
@@ -166,16 +169,13 @@ public class AdminController {
     private JFXCheckBox addIsBorrowable;
 
     @FXML
-    private JFXTreeTableView<Book> addTableView;
+    private JFXTreeTableView<Id> addTableView;
 
     @FXML
     private JFXButton addAddBtn;
 
     @FXML
     private JFXButton addDeleteBtn;
-
-    @FXML
-    private JFXButton addDeleteBtn1;
 
     @FXML
     private Tab userInfoTab;
@@ -190,7 +190,7 @@ public class AdminController {
     private JFXButton userInfoSearch;
 
     @FXML
-    private JFXTreeTableView<Borrower> userInfoTableView;
+    private JFXTreeTableView<BorrowedRecord> userInfoTableView;
 
     @FXML
     private JFXButton userInfoAdd;
@@ -201,7 +201,23 @@ public class AdminController {
     @FXML
     private JFXButton userInfoApply;
 
+    @FXML
+    private JFXButton addSaveBtn;
+
+    @FXML
+    private JFXTextField userInfoID;
+
+    @FXML
+    private JFXTextField userInfoName;
+
+    @FXML
+    private JFXTextField userInfoPhone;
+
+    @FXML
+    private JFXTextField userInfoBalance;
+
     private String[] bookInfo = new String[13];
+
 
     @FXML
     void initialize() {
@@ -251,7 +267,6 @@ public class AdminController {
         assert addTableView != null : "fx:id=\"addTableView\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addAddBtn != null : "fx:id=\"addAddBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addDeleteBtn != null : "fx:id=\"addDeleteBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
-        assert addDeleteBtn1 != null : "fx:id=\"addDeleteBtn1\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTab != null : "fx:id=\"userInfoTab\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoComboBox != null : "fx:id=\"userInfoComboBox\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoTextField != null : "fx:id=\"userInfoTextField\" was not injected: check your FXML file 'AdminUI.fxml'.";
@@ -260,6 +275,12 @@ public class AdminController {
         assert userInfoAdd != null : "fx:id=\"userInfoAdd\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoDelete != null : "fx:id=\"userInfoDelete\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoApply != null : "fx:id=\"userInfoApply\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addSaveBtn != null : "fx:id=\"addSaveBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert userInfoID != null : "fx:id=\"userInfoID\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert userInfoName != null : "fx:id=\"userInfoName\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert userInfoPhone != null : "fx:id=\"userInfoPhone\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert userInfoBalance != null : "fx:id=\"userInfoBalance\" was not injected: check your FXML file 'AdminUI.fxml'.";
+
 
         // 搜索图书页面的表格构建
         JFXTreeTableColumn<Book, String> idCol = new JFXTreeTableColumn<>("识别码");
@@ -315,26 +336,23 @@ public class AdminController {
         recordTableView.setShowRoot(false);
 
         //管理图书页面的表格构建
-        JFXTreeTableColumn<Book, String> idCol2 = new JFXTreeTableColumn<>("识别码");
+        JFXTreeTableColumn<Id, String> idCol2 = new JFXTreeTableColumn<>("识别码");
         idCol2.setPrefWidth(410);
-        idCol2.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+        idCol2.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getID()));
         addTableView.getColumns().setAll(idCol2);
         addTableView.setShowRoot(false);
 
         //用户信息页面的表格构建
-        JFXTreeTableColumn<Borrower, String> idCol3 = new JFXTreeTableColumn<>("用户ID");
-        JFXTreeTableColumn<Borrower, String> nameCol3 = new JFXTreeTableColumn<>("用户名");
-        JFXTreeTableColumn<Borrower, String> telCol3 = new JFXTreeTableColumn<>("电话号码");
-        JFXTreeTableColumn<Borrower, String> banlanceCol3 = new JFXTreeTableColumn<>("余额");
-        idCol3.setPrefWidth(200);
-        nameCol3.setPrefWidth(300);
-        telCol3.setPrefWidth(300);
-        banlanceCol3.setPrefWidth(300);
-        idCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getId()));
+        JFXTreeTableColumn<BorrowedRecord, String> nameCol3 = new JFXTreeTableColumn<>("书名");
+        JFXTreeTableColumn<BorrowedRecord, String> borrowDateCol3 = new JFXTreeTableColumn<>("借书日期");
+        JFXTreeTableColumn<BorrowedRecord, String> returnDateCol3 = new JFXTreeTableColumn<>("还书日期");
+        nameCol3.setPrefWidth(200);
+        borrowDateCol3.setPrefWidth(280);
+        returnDateCol3.setPrefWidth(280);
         nameCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
-        telCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getTel()));
-        banlanceCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBalance()));
-        userInfoTableView.getColumns().setAll(idCol3, nameCol3, telCol3, banlanceCol3);
+        borrowDateCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBorrowDate()));
+        returnDateCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getReturnDate()));
+        userInfoTableView.getColumns().setAll(nameCol3, borrowDateCol3, returnDateCol3);
         userInfoTableView.setShowRoot(false);
         /**
          * 搜索图书页面
@@ -342,6 +360,7 @@ public class AdminController {
         searchComboBox.setItems(FXCollections.observableArrayList("按书名", "按作者", "按出版社", "按类别"));
 
         searchSearchBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            searchTableView.setRoot(null);
             String att;
             if ("按书名".equals(searchComboBox.getValue())) {
                 att = "name";
@@ -464,6 +483,7 @@ public class AdminController {
         recordComboBox.setItems(FXCollections.observableArrayList("识别码", "条形码"));
 
         recordSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            recordTableView.setRoot(null);
             if (recordComboBox.getValue() == null) {
                 showMsgDialog("错误", "请选择识别码/条形码");
                 return;
@@ -497,40 +517,93 @@ public class AdminController {
                     s[3] = s[3] == null ? "暂未归还" : s[3];
                     BorrowedRecord br = new BorrowedRecord(s[0], s[1], s[2], s[3], s[4], s[5]);
                     borrowedRecords.add(br);
-                    TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
-                    recordTableView.setRoot(root);
                 }
+                TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
+                recordTableView.setRoot(root);
             }
         });
 
         recordReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
-            TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
-            recordTableView.setRoot(root);
+            recordTableView.setRoot(null);
+            recordComboBox.setValue(null);
+            recordTextField.setText(null);
         });
 
         /**
          * 管理图书页面
          */
         addSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            addTableView.setRoot(null);
             if ("".equals(addtextField.getText())) {
                 showMsgDialog("错误", "请输入条形码");
                 return;
             }
-            String[][] ss = LibraryAdministrator.getBookInfoByBar(addtextField.getText());
+            String[][] ss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
+            if (ss == null) {
+                showMsgDialog("错误", "不存在该书");
+                return;
+            }
+            addBarcode.setText(addtextField.getText());
+            addTitle.setText(ss[0][0]);
+            addAuthor.setText(ss[1][0]);
+            addPublisher.setText(ss[2][0]);
+            addcategory.setText(ss[3][0]);
+            addLocatioin.setText(ss[4][0]);
+            addPrice.setText(ss[5][0]);
+            if ("0".equals(ss[6][0]) || "1".equals(ss[6][0])) {
+                addIsBorrowable.setDisable(true);
+            } else {
+                addIsBorrowable.setSelected(true);
+            }
+            ObservableList<Id> ids = FXCollections.observableArrayList();
+            for (String s : ss[7]) {
+                Id id = new Id(s);
+                ids.add(id);
+            }
+            TreeItem<Id> root = new RecursiveTreeItem<>(ids, RecursiveTreeObject::getChildren);
+            addTableView.setRoot(root);
         });
 
         addReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-
+            if ("".equals(addtextField.getText())) {
+                showMsgDialog("错误", "请输入条形码");
+                return;
+            }
+            String[][] ss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
+            if (ss == null) {
+                showMsgDialog("错误", "不存在该书");
+                return;
+            }
+            addBarcode.setText(addtextField.getText());
+            addTitle.setText(ss[0][0]);
+            addAuthor.setText(ss[1][0]);
+            addPublisher.setText(ss[2][0]);
+            addcategory.setText(ss[3][0]);
+            addLocatioin.setText(ss[4][0]);
+            addPrice.setText(ss[5][0]);
+            if ("0".equals(ss[6][0]) || "1".equals(ss[6][0])) {
+                addIsBorrowable.setDisable(true);
+            } else {
+                addIsBorrowable.setSelected(true);
+            }
+            ObservableList<Id> ids = FXCollections.observableArrayList();
+            for (String s : ss[7]) {
+                Id id = new Id(s);
+                ids.add(id);
+            }
+            TreeItem<Id> root = new RecursiveTreeItem<>(ids, RecursiveTreeObject::getChildren);
+            addTableView.setRoot(root);
         });
 
         addAddBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
 
         });
+
         addDeleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
 
         });
-        addDeleteBtn1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+
+        addSaveBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
 
         });
 
@@ -538,36 +611,29 @@ public class AdminController {
         /**
          * 管理用户界面
          */
-        userInfoComboBox.setItems(FXCollections.observableArrayList("查询用户信息", "查询用户借阅记录"));
-
         userInfoSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            if (null == userInfoComboBox.getValue() || "".equals(userInfoComboBox.getValue())) {
-                showMsgDialog("错误", "请选择搜索类型");
-                return;
-            }
+            userInfoTableView.setRoot(null);
             if ("".equals(userInfoTextField.getText())) {
                 showMsgDialog("错误", "请输入用户ID");
                 return;
             }
-            if ("查询用户信息".equals(userInfoComboBox.getValue())) {
-
-            }
-           /* ObservableList<Book> books = LibraryAdministrator.queryByAtt(att, searchTextField.getText());
-            if (books.isEmpty()) {
-                showMsgDialog("", "抱歉，未找到相关书籍");
+            Borrower borrower = LibraryAdministrator.getUserInfo(userInfoTextField.getText());
+            if (borrower == null) {
+                showMsgDialog("错误", "没有该用户");
                 return;
             }
-            for (Book b : books) {
-                if ("0".equals(b.getState())) {
-                    b.setState("可借");
-                } else if ("1".equals(b.getState())) {
-                    b.setState("已借出");
-                } else {
-                    b.setState("典藏");
-                }
+            userInfoID.setText(borrower.getId());
+            userInfoName.setText(borrower.getName());
+            userInfoPhone.setText(borrower.getTel());
+            userInfoBalance.setText(borrower.getBalance());
+            LinkedList<String[]> linkedList = LibraryAdministrator.getRecordByUserID(userInfoTextField.getText());
+            ObservableList<BorrowedRecord> borrowedRecords = FXCollections.observableArrayList();
+            for (String[] s : linkedList) {
+                BorrowedRecord br = new BorrowedRecord(null, s[0], s[1], s[2], null, null);
+                borrowedRecords.add(br);
             }
-            TreeItem<Book> root = new RecursiveTreeItem<>(books, RecursiveTreeObject::getChildren);
-            searchTableView.setRoot(root);*/
+            TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
+            userInfoTableView.setRoot(root);
         });
     }
 
