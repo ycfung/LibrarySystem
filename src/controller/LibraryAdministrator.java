@@ -398,7 +398,7 @@ public class LibraryAdministrator {
     }
 
     //���ڵ��飺ʶ���롢������ =>bool���������ݿ⣩
-    public static Boolean addExistBook(String id, String barcode, String state) {
+    public static Boolean addExistBook(String id, String barcode, String state) throws SQLException{
         String sql = "insert into book(id,barcode,state) values(?,?,?)";
         Connection con = null;
         PreparedStatement ptmt = null;
@@ -413,7 +413,7 @@ public class LibraryAdministrator {
             if (count == 1)
                 flag = true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             try {
 
@@ -533,7 +533,7 @@ public class LibraryAdministrator {
     }
 
     public static String[][] getBookInfoByBarcode(String barcode) {
-        String sql1 = "select name,author,press,catego,address,price"
+        String sql1 = "select name,author, press, catego, address,price"
                 + " from barcode natural join address where barcode=\'" + barcode + "\'";
         String sql2 = "select state,id from book where barcode=\'" + barcode + "\'";
         String sql3 = "select count(*) from book where barcode=\'" + barcode + "\'";
@@ -605,6 +605,41 @@ public class LibraryAdministrator {
         return info;
     }
 
+    public static Boolean login(String ID, String PASSWD) {
+        String sql = "select * from administrator where ID=? and PASSWD=?";
+        Connection con = null;
+        PreparedStatement ptmt = null;
+        ResultSet rs = null;
+        Boolean flag = false;
+        try {
+            con = getAdmConnection();
+            ptmt = con.prepareStatement(sql);
+            String ciphertext = encrypt.getMD5String(PASSWD);
+            ptmt.setString(1, ID);
+            ptmt.setString(2, ciphertext);
+            rs = ptmt.executeQuery();
+            while (rs.next()) {
+                flag = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+
+                if (rs != null)
+                    rs.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (con != null)
+                    con.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return flag;
+    }
+
     public static void main(String[] args) throws SQLException {
 			/*Connection con=getAdmConnection();
 			Statement stmt=con.createStatement();
@@ -614,8 +649,7 @@ public class LibraryAdministrator {
 				System.out.println("address: "+rs.getString(2));
 			}*/
 
-        String[] s = getNewRecordByID("01");
-        System.out.println(s.length);
-
+        String sss[][] = getBookInfoByBarcode("05");
+        System.out.println(sss[0][0]);
     }
 }

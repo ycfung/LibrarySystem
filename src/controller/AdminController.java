@@ -3,11 +3,13 @@ package controller;
 import com.jfoenix.controls.*;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +27,8 @@ import model.Book;
 import model.BorrowedRecord;
 import model.Borrower;
 import model.Id;
+import oracle.sql.NUMBER;
+import sun.rmi.log.ReliableLog;
 
 
 public class AdminController {
@@ -218,7 +222,16 @@ public class AdminController {
     @FXML
     private JFXTextField userInfoPassword;
 
+    @FXML
+    private JFXButton addAddNewBookBtn;
+
+    @FXML
+    private JFXTextField addID;
+
     private String[] bookInfo = new String[13];
+    private ObservableList<Id> ids = FXCollections.observableArrayList();
+    private String id = null;
+    private String[][] sss = null;
 
     @FXML
     void initialize() {
@@ -281,6 +294,10 @@ public class AdminController {
         assert userInfoName != null : "fx:id=\"userInfoName\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoPhone != null : "fx:id=\"userInfoPhone\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoBalance != null : "fx:id=\"userInfoBalance\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addAddNewBookBtn != null : "fx:id=\"addAddNewBookBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addID != null : "fx:id=\"addID\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert userInfoReset != null : "fx:id=\"userInfoReset\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert userInfoPassword != null : "fx:id=\"userInfoPassword\" was not injected: check your FXML file 'AdminUI.fxml'.";
 
 
         // 搜索图书页面的表格构建
@@ -338,7 +355,7 @@ public class AdminController {
 
         //管理图书页面的表格构建
         JFXTreeTableColumn<Id, String> idCol2 = new JFXTreeTableColumn<>("识别码");
-        idCol2.setPrefWidth(410);
+        idCol2.setPrefWidth(280);
         idCol2.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getID()));
         addTableView.getColumns().setAll(idCol2);
         addTableView.setShowRoot(false);
@@ -537,36 +554,50 @@ public class AdminController {
         /**
          * 管理图书页面
          */
+        addLocatioin.setDisable(true);
+        addIsBorrowable.setDisable(true);
         addSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             addTableView.setRoot(null);
             if ("".equals(addtextField.getText())) {
                 showMsgDialog("错误", "请输入条形码");
                 return;
             }
-            String[][] ss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
-            if (ss[0] == null) {
+            sss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
+            if (sss[0] == null) {
                 showMsgDialog("错误", "不存在该书");
                 return;
             }
             addBarcode.setText(addtextField.getText());
-            addTitle.setText(ss[0][0]);
-            addAuthor.setText(ss[1][0]);
-            addPublisher.setText(ss[2][0]);
-            addcategory.setText(ss[3][0]);
-            addLocatioin.setText(ss[4][0]);
-            addPrice.setText(ss[5][0]);
-            if ("0".equals(ss[6][0]) || "1".equals(ss[6][0])) {
+            addBarcode.setDisable(true);
+            addTitle.setText(sss[0][0]);
+            addTitle.setDisable(true);
+            addAuthor.setText(sss[1][0]);
+            addAuthor.setDisable(true);
+            addPublisher.setText(sss[2][0]);
+            addPublisher.setDisable(true);
+            addcategory.setText(sss[3][0]);
+            addcategory.setDisable(true);
+            addLocatioin.setText(sss[4][0]);
+            addPrice.setText(sss[5][0]);
+            addPrice.setDisable(true);
+            if (null == sss[6]) {
+                addIsBorrowable.setDisable(false);
+            } else if ("0".equals(sss[6][0]) || "1".equals(sss[6][0])) {
                 addIsBorrowable.setDisable(true);
             } else {
                 addIsBorrowable.setSelected(true);
+                addIsBorrowable.setDisable(false);
             }
-            ObservableList<Id> ids = FXCollections.observableArrayList();
-            for (String s : ss[7]) {
-                Id id = new Id(s);
-                ids.add(id);
+            if (sss[7] != null) {
+                ids.clear();
+                for (String s : sss[7]) {
+                    Id id = new Id(s);
+                    ids.add(id);
+                }
+                TreeItem<Id> root = new RecursiveTreeItem<>(ids, RecursiveTreeObject::getChildren);
+                addTableView.setRoot(root);
+                addBarcode.setDisable(true);
             }
-            TreeItem<Id> root = new RecursiveTreeItem<>(ids, RecursiveTreeObject::getChildren);
-            addTableView.setRoot(root);
         });
 
         addReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -577,22 +608,126 @@ public class AdminController {
             addLocatioin.setText("");
             addAuthor.setText("");
             addPrice.setText("");
+            addcategory.setText("");
+            addID.setText("");
             addIsBorrowable.setSelected(false);
-            addIsBorrowable.setDisable(false);
+            addIsBorrowable.setDisable(true);
             addTableView.setRoot(null);
+            addBarcode.setDisable(false);
+            addTitle.setDisable(false);
+            addPrice.setDisable(false);
+            addPublisher.setDisable(false);
+            addAuthor.setDisable(false);
+            addcategory.setDisable(false);
         });
 
         addAddBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (!addBarcode.isDisable()) {
+                showMsgDialog("错误", "请先搜索一本书");
+                return;
+            }
+            if (null == addID.getText() || "".equals(addID.getText())) {
+                showMsgDialog("错误", "请输入识别码");
+                return;
+            }
+            String state;
+            if (addIsBorrowable.isSelected()) {
+                state = "2";
+            } else {
+                state = "0";
+            }
+            Boolean flag = false;
+            try {
+                flag = LibraryAdministrator.addExistBook(addID.getText(), addBarcode.getText(), state);
+            } catch (SQLException e) {
+                showMsgDialog("错误", "书库中已存在该标识码的书");
+            }
+            if (flag) {
+                showMsgDialog("成功", "增加库存成功");
+                sss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
+                ids.clear();
+                for (String s : sss[7]) {
+                    Id id = new Id(s);
+                    ids.add(id);
+                }
+                TreeItem<Id> root = new RecursiveTreeItem<>(ids, RecursiveTreeObject::getChildren);
+                addTableView.setRoot(root);
+            }
         });
 
         addDeleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-
+            if (id == null) {
+                showMsgDialog("错误", "请选择一行");
+                return;
+            }
+            for (int i = 0; i < sss[7].length; i++) {
+                if (sss[7][i].equals(id)) {
+                    if ("1".equals(sss[6][i])) {
+                        showMsgDialog("错误", "该书正在外借，暂时不可删除");
+                        return;
+                    }
+                    break;
+                }
+            }
+            Boolean flag = LibraryAdministrator.delBook(id);
+            if (flag) {
+                showMsgDialog("成功", "删除成功");
+                sss = LibraryAdministrator.getBookInfoByBarcode(addtextField.getText());
+                ids.clear();
+                for (String s : sss[7]) {
+                    Id id = new Id(s);
+                    ids.add(id);
+                }
+                TreeItem<Id> root = new RecursiveTreeItem<>(ids, RecursiveTreeObject::getChildren);
+                addTableView.setRoot(root);
+                return;
+            } else {
+                showMsgDialog("失败", "删除失败，请重新选择");
+            }
+            id = null;
         });
 
-        addSaveBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-
+        addAddNewBookBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (addBarcode.isDisable()) {
+                showMsgDialog("错误", "请先清空");
+                return;
+            }
+            if ("".equals(addBarcode.getText())) {
+                showMsgDialog("错误", "请输入条形码");
+                return;
+            }
+            if ("".equals(addTitle.getText())) {
+                showMsgDialog("错误", "请输入书名");
+                return;
+            }
+            if ("".equals(addPublisher.getText())) {
+                showMsgDialog("错误", "请输入出版社");
+                return;
+            }
+            if ("".equals(addAuthor.getText())) {
+                showMsgDialog("错误", "请输入作者");
+                return;
+            }
+            if ("".equals(addcategory.getText())) {
+                showMsgDialog("错误", "请输入分类");
+                return;
+            }
+            if ("".equals(addPrice.getText())) {
+                showMsgDialog("错误", "请输入价格");
+                return;
+            }
+            Boolean flag = LibraryAdministrator.addBook(addBarcode.getText(), addAuthor.getText(), addTitle.getText(),
+                    addcategory.getText(), addPublisher.getText(), addPrice.getText());
+            if (flag) {
+                showMsgDialog("成功", "新书入库成功");
+            } else {
+                showMsgDialog("失败", "新书入库失败");
+            }
         });
 
+        addTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            id = newValue != null ? newValue.getValue().getID() : null;
+        });
 
         /**
          * 管理用户界面
