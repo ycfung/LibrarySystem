@@ -16,9 +16,11 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/LoginUI.fxml"));
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
         //Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
+        fxmlLoader.load();
+        LoginController controller = fxmlLoader.getController();
+        controller.set_stage(stage);
         Parent root = FXMLLoader.load(getClass().getResource("/view/LoginUI.fxml"));
         Scene scene = new Scene(root);
-        LoginController controller = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("/view/styles/global.css").toExternalForm());
         stage.setResizable(false);
         stage.setTitle("Title");

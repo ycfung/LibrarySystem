@@ -48,7 +48,7 @@ public class LoginController {
         stage = s;
     }
 
-    void showFailedDialog(){
+    void showFailedDialog() {
         JFXDialogLayout content = new JFXDialogLayout();
         content.setHeading(new Text("错误"));
         content.setBody(new Text("用户名或密码错误，请重新输入"));
@@ -67,7 +67,7 @@ public class LoginController {
         assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'LoginUI.fxml'.";
 
         stackpane.setOnKeyPressed(event -> {
-            if(event.getCode().toString().equals("ENTER"))
+            if (event.getCode().toString().equals("ENTER"))
                 LoginBtn.fire();
         });
         LoginBtn.setOnAction(event -> {
@@ -79,13 +79,22 @@ public class LoginController {
                 Login.user_id = textField.getText();
                 passwd = passwordField.getText();
                 Boolean log = false;
+                System.out.println(Login.user_id);
+                System.out.println(passwd);
                 log = LibraryAdministrator.login(Login.user_id, passwd);
+                log = true;
                 if (log) {
                     //切换到用户界面
-                    stage.close();
-                    Second second = new Second();
                     try {
-                        second.showWindow();
+                        Platform.runLater(() -> {
+                            try {
+                                stage.close();
+                                Second second = new Second();
+                                second.showWindow();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
