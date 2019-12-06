@@ -13,10 +13,10 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginUI.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/LoginUI.fxml"));
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
         //Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AdminUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/LoginUI.fxml"));
         Scene scene = new Scene(root);
         LoginController controller = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("/view/styles/global.css").toExternalForm());
