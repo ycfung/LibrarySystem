@@ -735,8 +735,7 @@ public class LibraryAdministrator {
 			}*/
 
         //String sss[][] = getBookInfoByBarcode("05");
-        String[] s = getNewRecordByID("01");
-        System.out.println(s[0]);
+       getBookInfoByBarcode("08");
  /*       System.out.println(getNewRecordByID("01"));*/
     }
 }

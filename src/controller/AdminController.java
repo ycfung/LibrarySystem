@@ -2,12 +2,14 @@ package controller;
 
 import com.jfoenix.controls.*;
 
+import java.io.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,12 +17,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import model.Book;
 import model.BorrowedRecord;
 import model.Borrower;
@@ -28,6 +32,7 @@ import model.Id;
 
 import javafx.scene.image.ImageView;
 import org.omg.PortableServer.LIFESPAN_POLICY_ID;
+import sun.rmi.log.ReliableLog;
 
 
 public class AdminController {
@@ -239,10 +244,14 @@ public class AdminController {
     @FXML
     private ImageView addImageView;
 
+    @FXML
+    private JFXButton addImageBtn;
+
     private String[] bookInfo = new String[13];
     private ObservableList<Id> ids = FXCollections.observableArrayList();
     private String id = null;
     private String[][] sss = null;
+    private File file;
 
     @FXML
     void initialize() {
@@ -313,7 +322,7 @@ public class AdminController {
         assert bookInfoImageView != null : "fx:id=\"bookInfoImageView\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert recordImageView != null : "fx:id=\"recordImageView\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert addImageView != null : "fx:id=\"addImageView\" was not injected: check your FXML file 'AdminUI.fxml'.";
-
+        assert addImageBtn != null : "fx:id=\"addImageBtn\" was not injected: check your FXML file 'AdminUI.fxml'.";
 
         // 搜索图书页面的表格构建
         JFXTreeTableColumn<Book, String> idCol = new JFXTreeTableColumn<>("识别码");
@@ -499,7 +508,7 @@ public class AdminController {
             }
             bookInfo[0] = bookInfoTextField.getText();
             String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
-            for(String ss:s){
+            for (String ss : s) {
                 System.out.println(ss);
             }
             if (s[0] == null) {
@@ -750,9 +759,20 @@ public class AdminController {
                 showMsgDialog("错误", "请输入价格");
                 return;
             }
+            if (null == addImageView) {
+                showMsgDialog("错误", "请选择一张图片");
+                return;
+            }
             Boolean flag = LibraryAdministrator.addBook(addBarcode.getText(), addAuthor.getText(), addTitle.getText(),
                     addcategory.getText(), addPublisher.getText(), addPrice.getText());
-            if (flag) {
+            Boolean flag1 = false;
+            try {
+                BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+                flag1 = LibraryAdministrator.insertImage(inputStream, file.length(), addBarcode.getText());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (flag && flag1) {
                 showMsgDialog("成功", "新书入库成功");
             } else {
                 showMsgDialog("失败", "新书入库失败");
@@ -763,6 +783,23 @@ public class AdminController {
             id = newValue != null ? newValue.getValue().getID() : null;
         });
 
+        addImageBtn.setOnAction(action -> {
+            try {
+                if (addBarcode.isDisable()) {
+                    showMsgDialog("错误", "请先清空");
+                    return;
+                } else {
+                    FileChooser fileChooser = new FileChooser();
+                    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Supported Images (*.gif, *.bmp)", "*.gif", "*bmp");
+                    fileChooser.getExtensionFilters().add(extFilter);
+                    file = fileChooser.showOpenDialog(addImageBtn.getScene().getWindow());
+                    Image image = new Image(file.toURI().toURL().toString());
+                    addImageView.setImage(image);
+                }
+            } catch (Exception e) {
+                showMsgDialog("加载错误", e.getMessage());
+            }
+        });
         /**
          * 管理用户界面
          */

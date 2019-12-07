@@ -82,7 +82,6 @@ public class LoginController {
                 System.out.println(Login.user_id);
                 System.out.println(passwd);
                 log = LibraryAdministrator.login(Login.user_id, passwd);
-                log = true;
                 if (log) {
                     //切换到用户界面
                     try {
