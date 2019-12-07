@@ -8,8 +8,6 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,8 +25,9 @@ import model.Book;
 import model.BorrowedRecord;
 import model.Borrower;
 import model.Id;
-import oracle.sql.NUMBER;
-import sun.rmi.log.ReliableLog;
+
+import javafx.scene.image.ImageView;
+import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 
 
 public class AdminController {
@@ -228,6 +227,18 @@ public class AdminController {
     @FXML
     private JFXTextField addID;
 
+    @FXML
+    private ImageView searchImageView;
+
+    @FXML
+    private ImageView bookInfoImageView;
+
+    @FXML
+    private ImageView recordImageView;
+
+    @FXML
+    private ImageView addImageView;
+
     private String[] bookInfo = new String[13];
     private ObservableList<Id> ids = FXCollections.observableArrayList();
     private String id = null;
@@ -298,6 +309,10 @@ public class AdminController {
         assert addID != null : "fx:id=\"addID\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoReset != null : "fx:id=\"userInfoReset\" was not injected: check your FXML file 'AdminUI.fxml'.";
         assert userInfoPassword != null : "fx:id=\"userInfoPassword\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert searchImageView != null : "fx:id=\"searchImageView\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert bookInfoImageView != null : "fx:id=\"bookInfoImageView\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert recordImageView != null : "fx:id=\"recordImageView\" was not injected: check your FXML file 'AdminUI.fxml'.";
+        assert addImageView != null : "fx:id=\"addImageView\" was not injected: check your FXML file 'AdminUI.fxml'.";
 
 
         // 搜索图书页面的表格构建
@@ -310,8 +325,8 @@ public class AdminController {
         JFXTreeTableColumn<Book, String> priceCol = new JFXTreeTableColumn<>("价格");
         JFXTreeTableColumn<Book, String> stateCol = new JFXTreeTableColumn<>("状态");
         JFXTreeTableColumn<Book, String> addressCol = new JFXTreeTableColumn<>("地点");
-        idCol.setPrefWidth(90);
-        barcodeCol.setPrefWidth(90);
+        idCol.setPrefWidth(80);
+        barcodeCol.setPrefWidth(80);
         nameCol.setPrefWidth(200);
         authorCol.setPrefWidth(100);
         pressCol.setPrefWidth(200);
@@ -340,10 +355,10 @@ public class AdminController {
         JFXTreeTableColumn<BorrowedRecord, String> borrowerNameCol1 = new JFXTreeTableColumn<>("借阅者用户名");
         idCol1.setPrefWidth(100);
         nameCol1.setPrefWidth(175);
-        borrowDateCol1.setPrefWidth(250);
-        returnDateCol1.setPrefWidth(250);
+        borrowDateCol1.setPrefWidth(225);
+        returnDateCol1.setPrefWidth(225);
         borrowerIDCol1.setPrefWidth(100);
-        borrowerNameCol1.setPrefWidth(175);
+        borrowerNameCol1.setPrefWidth(150);
         idCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getID()));
         nameCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));
         borrowDateCol1.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getBorrowDate()));
@@ -355,7 +370,7 @@ public class AdminController {
 
         //管理图书页面的表格构建
         JFXTreeTableColumn<Id, String> idCol2 = new JFXTreeTableColumn<>("识别码");
-        idCol2.setPrefWidth(280);
+        idCol2.setPrefWidth(260);
         idCol2.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getID()));
         addTableView.getColumns().setAll(idCol2);
         addTableView.setShowRoot(false);
@@ -438,6 +453,9 @@ public class AdminController {
                 bookInfo[7] = "典藏";
             }
             setBookInfo();
+            if (!"暂无".equals(bookInfoBarcode.getText())) {
+                bookInfoImageView.setImage(LibraryAdministrator.getImage(bookInfoBarcode.getText()));
+            }
         });
 
         searchBookRecord.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -461,10 +479,13 @@ public class AdminController {
             recordTextField.setText(bookInfo[0]);
             TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
             recordTableView.setRoot(root);
+            recordImageView.setImage(LibraryAdministrator.getImage(bookInfo[1]));
         });
 
         searchTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             bookInfo[0] = newValue != null ? newValue.getValue().getId() : null;
+            bookInfo[1] = newValue != null ? newValue.getValue().getBarcode() : null;
+            searchImageView.setImage(LibraryAdministrator.getImage(bookInfo[1]));
         });
 
 
@@ -496,6 +517,9 @@ public class AdminController {
                 bookInfo[7] = "典藏";
             }
             setBookInfo();
+            if (!"暂无".equals(bookInfoBarcode.getText())) {
+                bookInfoImageView.setImage(LibraryAdministrator.getImage(bookInfoBarcode.getText()));
+            }
         });
 
 
@@ -528,6 +552,8 @@ public class AdminController {
                 }
                 TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
                 recordTableView.setRoot(root);
+                recordImageView.setImage(LibraryAdministrator.getImage(LibraryAdministrator.getNewRecordByID(recordTextField.getText())[0]));
+                System.out.println(111);
             } else {
                 LinkedList<String[]> linkedList = LibraryAdministrator.getRecordByBarcode(recordTextField.getText());
                 if (linkedList.isEmpty()) {
@@ -542,6 +568,7 @@ public class AdminController {
                 }
                 TreeItem<BorrowedRecord> root = new RecursiveTreeItem<>(borrowedRecords, RecursiveTreeObject::getChildren);
                 recordTableView.setRoot(root);
+                recordImageView.setImage(LibraryAdministrator.getImage(recordTextField.getText()));
             }
         });
 
@@ -549,7 +576,9 @@ public class AdminController {
             recordTableView.setRoot(null);
             recordComboBox.setValue("");
             recordTextField.setText("");
+            recordImageView.setImage(null);
         });
+
 
         /**
          * 管理图书页面
@@ -598,6 +627,7 @@ public class AdminController {
                 addTableView.setRoot(root);
                 addBarcode.setDisable(true);
             }
+            addImageView.setImage(LibraryAdministrator.getImage(addtextField.getText()));
         });
 
         addReset.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -619,6 +649,7 @@ public class AdminController {
             addPublisher.setDisable(false);
             addAuthor.setDisable(false);
             addcategory.setDisable(false);
+            addImageView.setImage(null);
         });
 
         addAddBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {

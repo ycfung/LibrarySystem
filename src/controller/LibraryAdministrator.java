@@ -1,14 +1,18 @@
 package controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import model.Book;
 import model.Borrower;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
+import javax.imageio.ImageIO;
 
 public class LibraryAdministrator {
     static {
@@ -398,7 +402,7 @@ public class LibraryAdministrator {
     }
 
     //���ڵ��飺ʶ���롢������ =>bool���������ݿ⣩
-    public static Boolean addExistBook(String id, String barcode, String state) throws SQLException{
+    public static Boolean addExistBook(String id, String barcode, String state) throws SQLException {
         String sql = "insert into book(id,barcode,state) values(?,?,?)";
         Connection con = null;
         PreparedStatement ptmt = null;
@@ -639,6 +643,73 @@ public class LibraryAdministrator {
         }
         return flag;
     }
+
+    //向图书信息中加入书籍图片
+    public static Boolean insertImage(InputStream is, long length, String barcode) {
+        String sql = "update barcode set Image=? where barcode=?";
+        Connection con = null;
+        PreparedStatement ptmt = null;
+        Boolean flag = false;
+        try {
+            con = getAdmConnection();
+            ptmt = con.prepareStatement(sql);
+            ptmt.setBinaryStream(1, is, (int) length);
+            ptmt.setString(2, barcode);
+            if (ptmt.executeUpdate() == 1)
+                flag = true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ptmt != null)
+                    ptmt.close();
+                if (con != null)
+                    con.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return flag;
+    }
+
+    //取图书图片
+    public static Image getImage(String barcode) {
+        String sql="select image from barcode where barcode="+barcode;
+        Connection con=null;
+        Statement stmt=null;
+        ResultSet rs=null;
+        Image image=null;
+        try {
+            con=getAdmConnection();
+            stmt=con.createStatement();
+            rs=stmt.executeQuery(sql);
+            while(rs.next()) {
+                Blob blob=rs.getBlob(1);
+                InputStream is=blob.getBinaryStream();
+                image= SwingFXUtils.toFXImage(ImageIO.read(is), null);
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }catch(IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if(rs!=null)
+                    rs.close();
+                if(stmt!=null)
+                    stmt.close();
+                if(con!=null)
+                    con.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return image;
+    }
+
 
     public static void main(String[] args) throws SQLException {
 			/*Connection con=getAdmConnection();
