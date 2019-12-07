@@ -499,34 +499,48 @@ public class LibraryAdministrator {
     }
 
     public static String[] getNewRecordByID(String id) {
-        String sql = "select barcode,barcode.name,author,press,catego,"
-                + "price,state,address,bdate,bdate+30,borrower.id,"
-                + "borrower.name from  book natural join barcode"
-                + " natural join address  join bbook on(book.id=bbook.bkid)"
-                + "  join borrower on(borrower.id=bbook.brid) where book.id=\'" + id + "\'";
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        String[] record = new String[12];
+        String sql1="select barcode,barcode.name,author,press,catego,price,"
+                + "state,address from barcode natural join book natural join address"
+                + " where id=\'"+id+"\'";
+        String sql2="select bdate,bdate+30,borrower.id,borrower.name from "
+                + " bbook join book on(bbook.bkid=book.id) join borrower on(borrower.id="
+                + "bbook.brid) where bbook.bkid=\'"+id+"\'";
+        Connection con=null;
+        Statement stmt1=null;
+        Statement stmt2=null;
+        ResultSet rs1=null;
+        ResultSet rs2=null;
+        String[] record=new String[12];
         try {
-            con = getAdmConnection();
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                for (int i = 0; i < 12; i++) {
-                    record[i] = rs.getString(i + 1);
+            con=getAdmConnection();
+            stmt1=con.createStatement();
+            stmt2=con.createStatement();
+            rs1=stmt1.executeQuery(sql1);
+            rs2=stmt2.executeQuery(sql2);
+            while(rs1.next()) {
+                for(int i=0;i<8;i++) {
+                    record[i]=rs1.getString(i+1);
                 }
             }
-        } catch (SQLException e) {
+            while(rs2.next()) {
+                for(int i=8;i<12;i++) {
+                    record[i]=rs2.getString(i-7);
+                }
+            }
+        }catch(SQLException e) {
             e.printStackTrace();
-        } finally {
+        }finally {
             try {
 
-                if (rs != null)
-                    rs.close();
-                if (stmt != null)
-                    stmt.close();
-                if (con != null)
+                if(rs1!=null)
+                    rs1.close();
+                if(rs2!=null)
+                    rs2.close();
+                if(stmt1!=null)
+                    stmt1.close();
+                if(stmt2!=null)
+                    stmt2.close();
+                if(con!=null)
                     con.close();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -676,31 +690,31 @@ public class LibraryAdministrator {
 
     //取图书图片
     public static Image getImage(String barcode) {
-        String sql="select image from barcode where barcode="+barcode;
-        Connection con=null;
-        Statement stmt=null;
-        ResultSet rs=null;
-        Image image=null;
+        String sql = "select image from barcode where barcode=" + barcode;
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        Image image = null;
         try {
-            con=getAdmConnection();
-            stmt=con.createStatement();
-            rs=stmt.executeQuery(sql);
-            while(rs.next()) {
-                Blob blob=rs.getBlob(1);
-                InputStream is=blob.getBinaryStream();
-                image= SwingFXUtils.toFXImage(ImageIO.read(is), null);
+            con = getAdmConnection();
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                Blob blob = rs.getBlob(1);
+                InputStream is = blob.getBinaryStream();
+                image = SwingFXUtils.toFXImage(ImageIO.read(is), null);
             }
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                if(rs!=null)
+                if (rs != null)
                     rs.close();
-                if(stmt!=null)
+                if (stmt != null)
                     stmt.close();
-                if(con!=null)
+                if (con != null)
                     con.close();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -720,7 +734,9 @@ public class LibraryAdministrator {
 				System.out.println("address: "+rs.getString(2));
 			}*/
 
-        String sss[][] = getBookInfoByBarcode("05");
-        System.out.println(sss[0][0]);
+        //String sss[][] = getBookInfoByBarcode("05");
+        String[] s = getNewRecordByID("01");
+        System.out.println(s[0]);
+ /*       System.out.println(getNewRecordByID("01"));*/
     }
 }

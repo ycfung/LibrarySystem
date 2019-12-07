@@ -499,6 +499,9 @@ public class AdminController {
             }
             bookInfo[0] = bookInfoTextField.getText();
             String[] s = LibraryAdministrator.getNewRecordByID(bookInfo[0]);
+            for(String ss:s){
+                System.out.println(ss);
+            }
             if (s[0] == null) {
                 showMsgDialog("错误", "暂无该书");
                 return;
