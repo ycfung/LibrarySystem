@@ -388,7 +388,7 @@ public class AdminController {
         JFXTreeTableColumn<BorrowedRecord, String> nameCol3 = new JFXTreeTableColumn<>("书名");
         JFXTreeTableColumn<BorrowedRecord, String> borrowDateCol3 = new JFXTreeTableColumn<>("借书日期");
         JFXTreeTableColumn<BorrowedRecord, String> returnDateCol3 = new JFXTreeTableColumn<>("还书日期");
-        nameCol3.setPrefWidth(200);
+        nameCol3.setPrefWidth(180);
         borrowDateCol3.setPrefWidth(200);
         returnDateCol3.setPrefWidth(200);
         nameCol3.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getValue().getName()));

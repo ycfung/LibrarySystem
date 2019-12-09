@@ -259,44 +259,44 @@ public class LibraryAdministrator {
     //�û�id=>���û����ļ�¼
     //String(1=>������2=>�������ڣ�3=>��������)
     public static LinkedList<String[]> getRecordByUserID(String id) {
-        String sql1 = "select barcode.name,bbook.bdate from bbook join book on(bbook.bkid=book.ID)"
-                + " natural join barcode where bbook.brid=\'" + id + "\'";
-        String sql2 = "select barcode.name,rbook.bdate ,rbook.rdate from rbook join book on(rbook.bkid=book.ID)"
-                + " natural join barcode where rbook.brid=\'" + id + "\'";
-        LinkedList records = new LinkedList<String[]>();
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs1 = null;
-        ResultSet rs2 = null;
+        String sql1="select barcode.name,bbook.bdate from bbook join book on(bbook.bkid=book.ID)"
+                + " join barcode on(barcode.barcode=book.barcode) where bbook.brid=\'"+id+"\'";
+        String sql2="select barcode.name,rbook.bdate ,rbook.rdate from rbook join book on(rbook.bkid=book.ID)"
+                + " join barcode on(barcode.barcode=book.barcode) where rbook.brid=\'"+id+"\'";
+        LinkedList records=new LinkedList<String[]>();
+        Connection con=null;
+        Statement stmt=null;
+        ResultSet rs1=null;
+        ResultSet rs2=null;
         try {
-            con = getAdmConnection();
-            stmt = con.createStatement();
-            rs1 = stmt.executeQuery(sql1);
-            while (rs1.next()) {
-                String[] record = new String[3];
-                record[0] = rs1.getString(1);
-                record[1] = rs1.getString(2);
+            con=getAdmConnection();
+            stmt=con.createStatement();
+            rs1=stmt.executeQuery(sql1);
+            while(rs1.next()) {
+                String []record=new String[3];
+                record[0]=rs1.getString(1);
+                record[1]=rs1.getString(2);
                 records.add(record);
             }
-            rs2 = stmt.executeQuery(sql2);
-            while (rs2.next()) {
-                String[] record = new String[3];
-                for (int i = 0; i < 3; i++) {
-                    record[i] = rs2.getString(i + 1);
+            rs2=stmt.executeQuery(sql2);
+            while(rs2.next()) {
+                String []record=new String[3];
+                for(int i=0;i<3;i++) {
+                    record[i]=rs2.getString(i+1);
                 }
                 records.add(record);
             }
-        } catch (SQLException e) {
+        }catch(SQLException e) {
             e.printStackTrace();
-        } finally {
+        }finally {
             try {
-                if (rs1 != null)
+                if(rs1!=null)
                     rs1.close();
-                if (rs2 != null)
+                if(rs2!=null)
                     rs2.close();
-                if (stmt != null)
+                if(stmt!=null)
                     stmt.close();
-                if (con != null)
+                if(con!=null)
                     con.close();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -499,48 +499,48 @@ public class LibraryAdministrator {
     }
 
     public static String[] getNewRecordByID(String id) {
-        String sql1="select barcode,barcode.name,author,press,catego,price,"
+        String sql1 = "select barcode,barcode.name,author,press,catego,price,"
                 + "state,address from barcode natural join book natural join address"
-                + " where id=\'"+id+"\'";
-        String sql2="select bdate,bdate+30,borrower.id,borrower.name from "
+                + " where id=\'" + id + "\'";
+        String sql2 = "select bdate,bdate+30,borrower.id,borrower.name from "
                 + " bbook join book on(bbook.bkid=book.id) join borrower on(borrower.id="
-                + "bbook.brid) where bbook.bkid=\'"+id+"\'";
-        Connection con=null;
-        Statement stmt1=null;
-        Statement stmt2=null;
-        ResultSet rs1=null;
-        ResultSet rs2=null;
-        String[] record=new String[12];
+                + "bbook.brid) where bbook.bkid=\'" + id + "\'";
+        Connection con = null;
+        Statement stmt1 = null;
+        Statement stmt2 = null;
+        ResultSet rs1 = null;
+        ResultSet rs2 = null;
+        String[] record = new String[12];
         try {
-            con=getAdmConnection();
-            stmt1=con.createStatement();
-            stmt2=con.createStatement();
-            rs1=stmt1.executeQuery(sql1);
-            rs2=stmt2.executeQuery(sql2);
-            while(rs1.next()) {
-                for(int i=0;i<8;i++) {
-                    record[i]=rs1.getString(i+1);
+            con = getAdmConnection();
+            stmt1 = con.createStatement();
+            stmt2 = con.createStatement();
+            rs1 = stmt1.executeQuery(sql1);
+            rs2 = stmt2.executeQuery(sql2);
+            while (rs1.next()) {
+                for (int i = 0; i < 8; i++) {
+                    record[i] = rs1.getString(i + 1);
                 }
             }
-            while(rs2.next()) {
-                for(int i=8;i<12;i++) {
-                    record[i]=rs2.getString(i-7);
+            while (rs2.next()) {
+                for (int i = 8; i < 12; i++) {
+                    record[i] = rs2.getString(i - 7);
                 }
             }
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
 
-                if(rs1!=null)
+                if (rs1 != null)
                     rs1.close();
-                if(rs2!=null)
+                if (rs2 != null)
                     rs2.close();
-                if(stmt1!=null)
+                if (stmt1 != null)
                     stmt1.close();
-                if(stmt2!=null)
+                if (stmt2 != null)
                     stmt2.close();
-                if(con!=null)
+                if (con != null)
                     con.close();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -735,7 +735,14 @@ public class LibraryAdministrator {
 			}*/
 
         //String sss[][] = getBookInfoByBarcode("05");
-       getBookInfoByBarcode("08");
- /*       System.out.println(getNewRecordByID("01"));*/
+        LinkedList<String[]> s = getRecordByUserID("02");
+        for (String[] ss : s) {
+            for (int i = 0; i < 3; i++) {
+                System.out.print(ss[i]);
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
+        /*       System.out.println(getNewRecordByID("01"));*/
     }
 }
