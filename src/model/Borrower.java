@@ -1,8 +1,6 @@
 package model;
 
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-
-public class Borrower extends RecursiveTreeObject<Borrower> {
+public class Borrower {
     private String id = null;
     private String name = null;
     private String tel = null;

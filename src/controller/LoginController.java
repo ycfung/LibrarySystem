@@ -81,7 +81,7 @@ public class LoginController {
                 Boolean log = false;
                 System.out.println(Login.user_id);
                 System.out.println(passwd);
-                log = LibraryAdministrator.login(Login.user_id, passwd);
+                log = LibraryBorrower.login(Login.user_id, passwd);
                 log = true;
                 if (log) {
                     //切换到用户界面
@@ -89,7 +89,7 @@ public class LoginController {
                         Platform.runLater(() -> {
                             try {
                                 stage.close();
-                                Second second = new Second();
+                                second_main second=new second_main();
                                 second.showWindow();
                             } catch (Exception e) {
                                 e.printStackTrace();

@@ -16,9 +16,9 @@
 
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserController">
    <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@styles/global.css">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="background_pane" stylesheets="@styles/global.css">
          <children>
-            <JFXTabPane stylesheets="@styles/Tab.css">
+            <JFXTabPane fx:id="pane2" prefHeight="803.0" prefWidth="1280.0" stylesheets="@styles/Tab.css">
                <tabs>
                   <Tab fx:id="searchTab" text="搜索图书">
                      <content>
@@ -48,7 +48,7 @@
                                     <Insets />
                                  </VBox.margin>
                                  <children>
-                                    <JFXTreeTableView fx:id="searchTableView" maxHeight="600.0" maxWidth="1166.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1166.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
+                                    <JFXTreeTableView fx:id="searchTableView" maxHeight="600.0" maxWidth="1166.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1166.0" style="-fx-background-color: transparent;">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>
@@ -218,15 +218,20 @@
                                           <Insets left="30.0" />
                                        </HBox.margin>
                                     </JFXTextField>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="381.0">
-                                       <children>
-                                          <JFXTextField fx:id="infoBorrowCount" editable="false" labelFloat="true" promptText="已借图书数量">
-                                             <HBox.margin>
-                                                <Insets left="100.0" />
-                                             </HBox.margin>
-                                          </JFXTextField>
-                                       </children>
-                                    </HBox>
+                                    <JFXTextField fx:id="infoBorrowCount" editable="false" labelFloat="true" promptText="电话号码">
+                                       <HBox.margin>
+                                          <Insets left="100.0" />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="1280.0">
+                                 <children>
+                                    <JFXTextField fx:id="infoExpired" editable="false" labelFloat="true" promptText="逾期数量">
+                                       <HBox.margin>
+                                          <Insets left="30.0" />
+                                       </HBox.margin>
+                                    </JFXTextField>
                                  </children>
                               </HBox>
                            </children>
