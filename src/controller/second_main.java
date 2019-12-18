@@ -18,7 +18,7 @@ public class second_main extends Application{
         Parent root = FXMLLoader.load(getClass().getResource("/view/UserUI.fxml"));
         Scene scene = new Scene(root);
         @SuppressWarnings("unused")
-		LoginController controller = fxmlLoader.getController();
+        LoginController controller = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("/view/styles/global.css").toExternalForm());
         stage.setResizable(false);
         stage.setTitle("Title");

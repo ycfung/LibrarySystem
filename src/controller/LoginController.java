@@ -21,8 +21,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import sun.rmi.runtime.Log;
 
-@SuppressWarnings("unused")
+
 public class LoginController {
+    //controllerType can be user or admin
+    String controllerType = "user";
 
     @FXML
     private StackPane stackpane;
@@ -89,8 +91,13 @@ public class LoginController {
                         Platform.runLater(() -> {
                             try {
                                 stage.close();
-                                second_main second=new second_main();
-                                second.showWindow();
+                                if (controllerType.equals("user")) {
+                                    second_main second = new second_main();
+                                    second.showWindow();
+                                } else if (controllerType.equals("admin")) {
+                                    Second second = new Second();
+                                    second.showWindow();
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
