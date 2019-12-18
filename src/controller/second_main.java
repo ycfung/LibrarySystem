@@ -7,19 +7,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
-    static String user_id = null;
+public class second_main extends Application{
+	Stage stage=new Stage();
     @Override
     public void start(Stage stage) throws Exception {
-        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginUI.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/LoginUI.fxml"));
+        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminLoginUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/UserUI.fxml"));
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        //Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
-        fxmlLoader.load();
-        LoginController controller = fxmlLoader.getController();
-        controller.set_stage(stage);
-        Parent root = FXMLLoader.load(getClass().getResource("/view/LoginUI.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("AdminLoginUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/UserUI.fxml"));
         Scene scene = new Scene(root);
+        @SuppressWarnings("unused")
+        UserLoginController controller = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("/view/styles/global.css").toExternalForm());
         stage.setResizable(false);
         stage.setTitle("Title");
@@ -29,5 +28,9 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-}
+	public void  showWindow() throws Exception {
+		start(stage);
+	}
+	
 
+}
