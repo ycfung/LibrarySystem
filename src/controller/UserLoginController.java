@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public class UserLoginController {
     //controllerType can be user or admin
-    String controllerType = "user";
+    String controllerType = "admin";
 
     @FXML
     private StackPane stackpane;
@@ -68,31 +68,26 @@ public class UserLoginController {
             passwordField.setDisable(true);
             new Thread(() -> {
                 String passwd;
-<<<<<<< HEAD:src/controller/LoginController.java
-                Main.user_id = textField.getText();
-=======
                 Login.user_id = textField.getText();
                 MainAdmin.user_id = Login.user_id;
->>>>>>> 4c2cb83a79b3cdd6929de4c4744e3c8f2381f5a4:src/controller/UserLoginController.java
                 passwd = passwordField.getText();
                 Boolean log = false;
-                System.out.println(Main.user_id);
+                System.out.println(Login.user_id);
                 System.out.println(passwd);
-<<<<<<< HEAD:src/controller/LoginController.java
-                log = LibraryAdministrator.login(Main.user_id, passwd);
-                log = true;
-=======
                 log = LibraryBorrower.login(Login.user_id, passwd);
->>>>>>> 4c2cb83a79b3cdd6929de4c4744e3c8f2381f5a4:src/controller/UserLoginController.java
                 if (log) {
                     //切换到用户界面
                     try {
                         Platform.runLater(() -> {
                             try {
                                 stage.close();
-                                Second second = new Second();
-                                second.showWindow();
-
+                                if (controllerType.equals("user")) {
+                                    second_main second = new second_main();
+                                    second.showWindow();
+                                } else if (controllerType.equals("admin")) {
+                                    Second second = new Second();
+                                    second.showWindow();
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
