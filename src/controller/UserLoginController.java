@@ -2,27 +2,17 @@ package controller;
 
 import com.jfoenix.controls.*;
 
-import java.io.Closeable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.*;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import sun.rmi.runtime.Log;
 
 
-public class LoginController {
+public class UserLoginController {
     //controllerType can be user or admin
     String controllerType = "user";
 
@@ -63,10 +53,10 @@ public class LoginController {
 
     @FXML
     void initialize() {
-        assert textField != null : "fx:id=\"textField\" was not injected: check your FXML file 'LoginUI.fxml'.";
-        assert passwordField != null : "fx:id=\"passwordField\" was not injected: check your FXML file 'LoginUI.fxml'.";
-        assert LoginBtn != null : "fx:id=\"LoginBtn\" was not injected: check your FXML file 'LoginUI.fxml'.";
-        assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'LoginUI.fxml'.";
+        assert textField != null : "fx:id=\"textField\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
+        assert passwordField != null : "fx:id=\"passwordField\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
+        assert LoginBtn != null : "fx:id=\"LoginBtn\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
+        assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
 
         stackpane.setOnKeyPressed(event -> {
             if (event.getCode().toString().equals("ENTER"))
@@ -79,12 +69,12 @@ public class LoginController {
             new Thread(() -> {
                 String passwd;
                 Login.user_id = textField.getText();
+                MainAdmin.user_id = Login.user_id;
                 passwd = passwordField.getText();
                 Boolean log = false;
                 System.out.println(Login.user_id);
                 System.out.println(passwd);
                 log = LibraryBorrower.login(Login.user_id, passwd);
-                log = true;
                 if (log) {
                     //切换到用户界面
                     try {

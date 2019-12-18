@@ -48,7 +48,7 @@
                                     <Insets />
                                  </VBox.margin>
                                  <children>
-                                    <JFXTreeTableView fx:id="searchTableView" maxHeight="600.0" maxWidth="1166.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1166.0" style="-fx-background-color: transparent;">
+                                    <JFXTreeTableView fx:id="searchTableView" maxHeight="600.0" maxWidth="1166.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1166.0" style="-fx-background-color: transparent; -fx-border-color: grey;">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>

@@ -11,14 +11,14 @@ public class Login extends Application
 { static String user_id = null;
     @Override
     public void start(Stage stage) throws Exception {
-        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginUI.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/LoginUI.fxml"));
+        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminLoginUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminLoginUI.fxml"));
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        //Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("AdminLoginUI.fxml"));
         fxmlLoader.load();
-        LoginController controller = fxmlLoader.getController();
+        UserLoginController controller = fxmlLoader.getController();
         controller.set_stage(stage);
-        Parent root = FXMLLoader.load(getClass().getResource("/view/LoginUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/AdminLoginUI.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/view/styles/global.css").toExternalForm());
         stage.setResizable(false);

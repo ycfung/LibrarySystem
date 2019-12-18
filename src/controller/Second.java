@@ -12,14 +12,14 @@ public class Second extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginUI.fxml"));
+        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminLoginUI.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminUI.fxml"));
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        //Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("AdminLoginUI.fxml"));
         Parent root = FXMLLoader.load(getClass().getResource("/view/AdminUI.fxml"));
         Scene scene = new Scene(root);
         @SuppressWarnings("unused")
-        LoginController controller = fxmlLoader.getController();
+        UserLoginController controller = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("/view/styles/global.css").toExternalForm());
         stage.setResizable(false);
         stage.setTitle("Title");
