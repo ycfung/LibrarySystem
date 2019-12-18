@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public class UserLoginController {
     //controllerType can be user or admin
-    String controllerType = "admin";
+    String controllerType = "user";
 
     @FXML
     private StackPane stackpane;
