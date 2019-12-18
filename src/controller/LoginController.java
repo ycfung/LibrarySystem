@@ -24,7 +24,7 @@ import sun.rmi.runtime.Log;
 
 public class LoginController {
     //controllerType can be user or admin
-    String controllerType = "user";
+    String controllerType = "admin";
 
     @FXML
     private StackPane stackpane;

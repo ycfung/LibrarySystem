@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.XmlOneway;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -246,6 +247,12 @@ public class AdminController {
 
     @FXML
     private JFXButton addImageBtn;
+
+    @FXML
+    private JFXTextField userInfoTopupAmount;
+
+    @FXML
+    private JFXButton userInfoTopup;
 
     private String[] bookInfo = new String[13];
     private ObservableList<Id> ids = FXCollections.observableArrayList();
@@ -803,6 +810,7 @@ public class AdminController {
         /**
          * 管理用户界面
          */
+        userInfoBalance.setDisable(true);
         userInfoSearch.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             userInfoTableView.setRoot(null);
             if ("".equals(userInfoTextField.getText())) {
@@ -841,6 +849,7 @@ public class AdminController {
             userInfoID.setDisable(false);
             userInfoPassword.setText("");
             userInfoTableView.setRoot(null);
+            userInfoTopupAmount.setText("");
         });
 
         userInfoAdd.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -940,6 +949,31 @@ public class AdminController {
             } else {
                 showMsgDialog("错误", "删除用户信息失败");
             }
+        });
+
+        userInfoTopup.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (!userInfoID.isDisable()) {
+                showMsgDialog("错误", "请先搜索一个用户");
+                return;
+            }
+            if (null == userInfoTopupAmount || "".equals(userInfoTopupAmount.getText())) {
+                showMsgDialog("错误", "请输入充值金额");
+                return;
+            }
+            try {
+                float m = Float.parseFloat(userInfoTopupAmount.getText());
+                if (m <= 0) {
+                    showMsgDialog("错误", "请输入正确的充值金额");
+                    return;
+                }
+            } catch (Exception e) {
+                showMsgDialog("错误", "请输入正确的充值金额");
+                return;
+            }
+            float money = Float.parseFloat(userInfoBalance.getText()) + Float.parseFloat(userInfoTopupAmount.getText());
+            userInfoTopupAmount.setText("");
+            userInfoBalance.setText(String.valueOf(money));
+            showMsgDialog("提示", "更新信息后即充值成功，否则失败");
         });
     }
 
