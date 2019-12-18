@@ -292,7 +292,7 @@
                                                 <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
                                              </VBox.margin>
                                           </JFXTextField>
-                                          <JFXButton fx:id="addAddNewBookBtn" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #27ae60;" text="新书入库" textFill="WHITE">
+                                          <JFXButton fx:id="addAddNewBookBtn" buttonType="RAISED" minHeight="40.0" style="-fx-background-color: #27ae60;" text="新书入库" textFill="WHITE">
                                              <VBox.margin>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </VBox.margin>
@@ -343,7 +343,7 @@
                                                 <Insets bottom="30.0" />
                                              </VBox.margin>
                                              <children>
-                                                            <JFXButton fx:id="addAddBtn" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #27ae60;" text="增加库存" textFill="WHITE">
+                                                            <JFXButton fx:id="addAddBtn" buttonType="RAISED" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" style="-fx-background-color: #27ae60;" text="增加库存" textFill="WHITE">
                                                    <HBox.margin>
                                                       <Insets right="30.0" />
                                                    </HBox.margin>
@@ -362,7 +362,7 @@
                                                       <Insets bottom="100.0" top="50.0" />
                                                    </VBox.margin>
                                                 </ImageView>
-                                                <JFXButton fx:id="addImageBtn" buttonType="RAISED" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #27ae60;" text="选择图片" textFill="WHITE" />
+                                                <JFXButton fx:id="addImageBtn" buttonType="RAISED" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" style="-fx-background-color: #27ae60;" text="选择图片" textFill="WHITE" />
                                                         </children>
                                                     </VBox>
                                        </children>
