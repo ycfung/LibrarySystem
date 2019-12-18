@@ -78,12 +78,12 @@ public class LoginController {
             passwordField.setDisable(true);
             new Thread(() -> {
                 String passwd;
-                Main.user_id = textField.getText();
+                Login.user_id = textField.getText();
                 passwd = passwordField.getText();
                 Boolean log = false;
-                System.out.println(Main.user_id);
+                System.out.println(Login.user_id);
                 System.out.println(passwd);
-                log = LibraryAdministrator.login(Main.user_id, passwd);
+                log = LibraryBorrower.login(Login.user_id, passwd);
                 log = true;
                 if (log) {
                     //切换到用户界面
@@ -91,9 +91,13 @@ public class LoginController {
                         Platform.runLater(() -> {
                             try {
                                 stage.close();
-                                Second second = new Second();
-                                second.showWindow();
-
+                                if (controllerType.equals("user")) {
+                                    second_main second = new second_main();
+                                    second.showWindow();
+                                } else if (controllerType.equals("admin")) {
+                                    Second second = new Second();
+                                    second.showWindow();
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
