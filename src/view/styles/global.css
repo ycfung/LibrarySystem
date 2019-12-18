@@ -11,3 +11,8 @@ FontAwesomeIcon:hover {
 -fx-font-family: "Microsoft YaHei UI";
 }
 
+.background_pane {
+-fx-background-image: url("background.jpg");
+-fx-background-opacity:0.5;
+
+}

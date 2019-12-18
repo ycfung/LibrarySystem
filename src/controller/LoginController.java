@@ -2,17 +2,27 @@ package controller;
 
 import com.jfoenix.controls.*;
 
+import java.io.Closeable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javax.swing.*;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import sun.rmi.runtime.Log;
 
 
-public class UserLoginController {
+public class LoginController {
     //controllerType can be user or admin
     String controllerType = "user";
 
@@ -53,10 +63,10 @@ public class UserLoginController {
 
     @FXML
     void initialize() {
-        assert textField != null : "fx:id=\"textField\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
-        assert passwordField != null : "fx:id=\"passwordField\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
-        assert LoginBtn != null : "fx:id=\"LoginBtn\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
-        assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'AdminLoginUI.fxml'.";
+        assert textField != null : "fx:id=\"textField\" was not injected: check your FXML file 'LoginUI.fxml'.";
+        assert passwordField != null : "fx:id=\"passwordField\" was not injected: check your FXML file 'LoginUI.fxml'.";
+        assert LoginBtn != null : "fx:id=\"LoginBtn\" was not injected: check your FXML file 'LoginUI.fxml'.";
+        assert stackpane != null : "fx:id=\"stackpane\" was not injected: check your FXML file 'LoginUI.fxml'.";
 
         stackpane.setOnKeyPressed(event -> {
             if (event.getCode().toString().equals("ENTER"))
@@ -68,22 +78,13 @@ public class UserLoginController {
             passwordField.setDisable(true);
             new Thread(() -> {
                 String passwd;
-<<<<<<< HEAD:src/controller/LoginController.java
                 Main.user_id = textField.getText();
-=======
-                Login.user_id = textField.getText();
-                MainAdmin.user_id = Login.user_id;
->>>>>>> 4c2cb83a79b3cdd6929de4c4744e3c8f2381f5a4:src/controller/UserLoginController.java
                 passwd = passwordField.getText();
                 Boolean log = false;
                 System.out.println(Main.user_id);
                 System.out.println(passwd);
-<<<<<<< HEAD:src/controller/LoginController.java
                 log = LibraryAdministrator.login(Main.user_id, passwd);
                 log = true;
-=======
-                log = LibraryBorrower.login(Login.user_id, passwd);
->>>>>>> 4c2cb83a79b3cdd6929de4c4744e3c8f2381f5a4:src/controller/UserLoginController.java
                 if (log) {
                     //切换到用户界面
                     try {
